@@ -1,4 +1,4 @@
 # for direnv
-if [ -z "$PIXI_IN_SHELL" ]; then
-  [ -d .pixi ] && eval "$(pixi shell-hook)"
-fi
+# [ -f .venv/Scripts/activate ] && source .venv/Scripts/activate
+# [ -f .venv/bin/activate ] && source .venv/bin/activate
+# export UV_NATIVE_TLS=true
