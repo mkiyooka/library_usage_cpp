@@ -1,0 +1,117 @@
+{
+    /* C/C++ file settings */
+    "[c]": {
+        "editor.rulers": [120],
+        "editor.defaultFormatter": "llvm-vs-code-extensions.vscode-clangd",
+        "editor.formatOnSave": true
+    },
+    "[cpp]": {
+        "editor.rulers": [120],
+        "editor.defaultFormatter": "llvm-vs-code-extensions.vscode-clangd",
+        "editor.formatOnSave": true
+    },
+    "C_Cpp.formatting": "disabled", // use clangd
+    "C_Cpp.intelliSenseEngine": "disabled", // use clangd
+    "C_Cpp.codeAnalysis.clangTidy.enabled": true,
+
+    /* CMake settings */
+    "cmake.buildDirectory": "${workspaceFolder}/build",
+    "cmake.environment": {
+        "PATH": "${env:HOME}/.pixi/bin:${env:PATH}"
+    },
+    "c-cpp-flylint.clang.enable": false,
+    "c-cpp-flylint.cppcheck.suppressions": [
+        "missingIncludeSystem",
+        "unusedFunction",
+        "unusedStructMember"
+    ],
+    "c-cpp-flylint.lizard.enable": false,
+    "c-cpp-flylint.flawfinder.enable": false,
+    "c-cpp-flylint.flexelint.enable": false,
+
+    /* toml file settings */
+    "[toml]": {
+        "editor.defaultFormatter": "tombi-toml.tombi",
+        "editor.formatOnSave": true
+    },
+
+    /* json, jsonc */
+    "[json][jsonc]": {
+        "editor.defaultFormatter": "esbenp.prettier-vscode",
+        "editor.formatOnSave": true
+    },
+
+    /* yaml */
+    "[yaml]": {
+        "editor.defaultFormatter": "esbenp.prettier-vscode",
+        "editor.formatOnSave": true
+    },
+
+    /* markdown */
+    "[markdown]": {
+        "editor.defaultFormatter": "DavidAnson.vscode-markdownlint",
+        "editor.formatOnSave": true,
+        "editor.wordWrap": "on",
+        "editor.quickSuggestions": {
+            "comments": "off",
+            "strings": "off",
+            "other": "off"
+        }
+    },
+    "markdown-preview-enhanced.breakOnSingleNewLine": false,
+
+    "files.associations": {
+        ".clang-format": "yaml",
+        ".clang-tidy": "yaml",
+        ".clangd": "yaml",
+        "dprint.json": "jsonc",
+        "settings.json": "jsonc"
+    },
+
+    /* ignore, exclude settings */
+    "files.exclude": {
+        // Python environments
+        "**/.venv": true,
+        "**/.nox": true,
+        "**/.ruff_cache": true,
+        "**/.pytest_cache": true,
+        "**/__pycache__": true,
+        "**/*.egg-info": true,
+        // C++ build artifacts
+        "**/.pixi": true,
+        "**/build": true,
+        "**/.cache": true,
+        "**/*.o": true,
+        "**/*.obj": true
+    },
+    "files.watcherExclude": {
+        // Python environments
+        "**/.venv": true,
+        "**/.nox": true,
+        "**/.ruff_cache": true,
+        "**/.pytest_cache": true,
+        "**/__pycache__": true,
+        "**/ext": true,
+        // C++ build artifacts
+        "**/.pixi": true,
+        "**/build": true,
+        "**/.cache": true,
+        "**/*.o": true,
+        "**/*.obj": true,
+        "**/CMakeFiles": true
+    },
+    "search.exclude": {
+        // Python environments
+        "**/.venv": true,
+        "**/.nox": true,
+        "**/.ruff_cache": true,
+        "**/.pytest_cache": true,
+        "**/__pycache__": true,
+        "**/ext": true,
+        // C++ build artifacts
+        "**/.pixi": true,
+        "**/build": true,
+        "**/.cache": true,
+        "**/CMakeFiles": true
+    }
+}

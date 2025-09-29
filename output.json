@@ -1,0 +1,39 @@
+{
+  "database": {
+    "dob": "1979-05-27T07:32:00-08:00",
+    "enabled": true,
+    "ports": [
+      8000,
+      8001,
+      8002
+    ]
+  },
+  "plugin": [
+    {
+      "file": "fileA.json",
+      "number": 10
+    },
+    {
+      "file": "fileB.json",
+      "number": 15
+    },
+    {
+      "file": "fileC.json",
+      "number": 20
+    }
+  ],
+  "servers": {
+    "alpha": {
+      "dc": "eqdc10",
+      "ip": "10.0.0.1"
+    },
+    "beta": {
+      "dc": "eqdc10",
+      "ip": "10.0.0.2"
+    }
+  },
+  "settings": {
+    "value": 42
+  },
+  "title": "JSON Example"
+}

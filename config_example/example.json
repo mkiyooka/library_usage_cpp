@@ -1,0 +1,28 @@
+{
+    "title": "JSON Example",
+    "database": {
+        "ports": [8000, 8001],
+        "enabled": true,
+        "value": 42
+    },
+    "servers": {
+        "alpha": {
+            "ip": "10.0.0.1",
+            "dc": "eqdc10"
+        },
+        "beta": {
+            "ip": "10.0.0.2",
+            "dc": "eqdc10"
+        }
+    },
+    "plugin": [
+        {
+            "file": "fileA.json",
+            "number": 10
+        },
+        {
+            "file": "fileB.json",
+            "number": 15
+        }
+    ]
+}

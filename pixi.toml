@@ -1,0 +1,56 @@
+[project]
+name = "cpp-dev"
+version = "0.1.0"
+description = "C++ Development Environment"
+channels = ["conda-forge"]
+platforms = ["linux-64", "osx-64", "osx-arm64", "win-64"]
+
+[dependencies]
+# C++ Compiler and Tools (Cross-platform)
+# C++17 minimum requirement: clang >= 5.0, gcc >= 7.0, MSVC >= 19.14 (VS2017)
+clang = "==21.1.1"  # Latest stable version - available on all platforms
+clang-tools = "==21.1.1"  # Includes: clang-tidy, clang-format, clangd
+cppcheck = "==2.18.3"  # Static analysis tool
+# Build Tools
+cmake = "==4.1.1"  # Build system generator
+ninja = "==1.13.1"  # Build system
+conan = "==2.20.1"  # Package Manager
+
+# Linux-specific dependencies (GCC toolchain)
+[target.linux-64.dependencies]
+gcc = "*"  # GCC compiler
+gxx = "*"  # G++ compiler
+libgcc-ng = "*"  # GCC runtime library
+libstdcxx-ng = "*"  # C++ standard library
+
+# Windows-specific dependencies (GCC/Clang toolchain)
+[target.win-64.dependencies]
+# Cross-compilation toolchain for Windows
+clang_win-64 = "*"  # Clang cross-compiler for Windows
+clangxx_win-64 = "*"  # Clang++ cross-compiler for Windows
+# MSYS2/MinGW related packages
+m2w64-sysroot_win-64 = "*"  # System root for MinGW-w64
+m2-gcc-libs = "*"  # GCC runtime libraries
+libgcc-devel_win-64 = "*"  # GCC development libraries
+
+# Note: The packages above provide cross-compilation support and runtime libraries.
+# For native Windows development, also consider:
+# - Visual Studio 2019/2022 with C++ workload (MSVC)
+# - Visual Studio Build Tools + Windows SDK
+# - MSYS2 with MinGW-w64 toolchain (native GCC)
+#
+# Install native toolchains via package managers:
+# choco install mingw visualstudio2022buildtools
+# winget install Git.Git MSYS2.MSYS2
+
+[tasks]
+setup-deps = "conan install . --output-folder=build --build=missing"
+config = "cmake --preset=release"
+config-debug = "cmake --preset=debug"
+setup = "pixi install && pixi run setup-deps && pixi run config"
+setup-debug = "pixi install && pixi run setup-deps && pixi run config-debug"
+build = "cmake --build build -j"
+clean = "cmake --build build --target clean"
+test = "ctest --test-dir build"
+lint = "cmake --build build --target lint"
+format = "cmake --build build --target format"

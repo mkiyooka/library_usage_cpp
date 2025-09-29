@@ -1,0 +1,84 @@
+{
+    "version": "2.0.0",
+    "options": {
+        "cwd": "${workspaceFolder}",
+        "env": {
+            "PATH": "${env:HOME}/.pixi/bin:${env:PATH}"
+        }
+    },
+    "tasks": [
+        {
+            "label": "setup_release",
+            "type": "shell",
+            "command": "pixi",
+            "args": ["run", "setup"],
+            "group": "build",
+            "detail": "cmakeによるbuildに必要なセットアップを一括実行",
+            "problemMatcher": []
+        },
+        {
+            "label": "build_release",
+            "type": "shell",
+            "command": "pixi",
+            "args": ["run", "build"],
+            "group": { "kind": "build", "isDefault": true },
+            "detail": "CMakeでプロジェクトをビルド",
+            "dependsOn": ["setup_release"],
+            "problemMatcher": ["$gcc"]
+        },
+        {
+            "label": "setup_debug",
+            "type": "shell",
+            "command": "pixi",
+            "args": ["run", "setup-debug"],
+            "group": "build",
+            "detail": "cmakeによるbuildに必要なセットアップを一括実行",
+            "problemMatcher": []
+        },
+        {
+            "label": "build_debug",
+            "type": "shell",
+            "command": "pixi",
+            "args": ["run", "build"],
+            "group": { "kind": "build", "isDefault": true },
+            "detail": "CMakeでプロジェクトをビルド",
+            "dependsOn": ["setup_debug"],
+            "problemMatcher": ["$gcc"]
+        },
+        {
+            "label": "cmake_clean",
+            "type": "shell",
+            "command": "pixi",
+            "args": ["run", "clean"],
+            "group": "build",
+            "detail": "ビルド成果物をクリーンアップ"
+        },
+        {
+            "label": "ctest",
+            "type": "shell",
+            "command": "pixi",
+            "args": ["run", "test"],
+            "group": "test",
+            "detail": "テストを実行",
+            "dependsOn": ["build_release"]
+        },
+        {
+            "label": "quality_format",
+            "type": "shell",
+            "command": "pixi",
+            "args": ["run", "format"],
+            "group": "build",
+            "detail": "clang-formatでコードをフォーマット",
+            "dependsOn": ["setup_release"]
+        },
+        {
+            "label": "quality_lint",
+            "type": "shell",
+            "command": "pixi",
+            "args": ["run", "lint"],
+            "group": "build",
+            "detail": "clang-tidyでコードをリント",
+            "dependsOn": ["setup_release"]
+        }
+    ]
+}
