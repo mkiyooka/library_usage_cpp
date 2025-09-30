@@ -25,7 +25,6 @@ void LoadConfig(const std::string &file_path, Config &conf) {
         conf.title = json_config["title"];
     }
 
-
     // plugin配列の読み取り
     if (json_config.contains("plugin") && json_config["plugin"].is_array()) {
         for (const auto &plugin_json : json_config["plugin"]) {

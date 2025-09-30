@@ -12,8 +12,8 @@ int main() {
     // database部分を一括代入
     Json database_section = {
         {  "ports", {8000, 8001}},
-        {"enabled",       true},
-        {  "value",         42}
+        {"enabled",         true},
+        {  "value",           42}
     };
     config["database"] = database_section;
 
