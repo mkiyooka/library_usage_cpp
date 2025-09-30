@@ -1,0 +1,11 @@
+[default]
+extend-ignore-identifiers-re = [
+  "ext/",
+  "third_party/",
+  "build/",
+  "*.csv",
+]
+
+[default.extend-identifiers]
+
+[default.extend-words]
