@@ -3,17 +3,12 @@
 # - project requirement: >= 3.19
 cmake_minimum_required(VERSION 3.19)
 
-# Set default build type before Conan setup
+# Set default build type
 if (NOT CMAKE_BUILD_TYPE AND NOT CMAKE_CONFIGURATION_TYPES)
     message(STATUS "Setting default build type to Release")
     set(CMAKE_BUILD_TYPE Release CACHE STRING "Choose the type of build." FORCE)
     set_property(CACHE CMAKE_BUILD_TYPE PROPERTY STRINGS "Debug" "Release" "MinSizeRel" "RelWithDebInfo")
 endif()
-
-# Conan setup
-include(${CMAKE_BINARY_DIR}/generators/conan_toolchain.cmake OPTIONAL)
-list(APPEND CMAKE_MODULE_PATH ${CMAKE_BINARY_DIR}/generators)
-list(APPEND CMAKE_PREFIX_PATH ${CMAKE_BINARY_DIR}/generators)
 
 # Default compiler preference (non-macOS: GCC preferred)
 if(NOT APPLE AND NOT DEFINED CMAKE_C_COMPILER AND NOT DEFINED CMAKE_CXX_COMPILER)
@@ -52,31 +47,102 @@ option(USE_PCH "Use precompiled headers" OFF)
 
 include_directories(include)
 
-# Conanで導入されるサードパーティライブラリの検索
-find_package(CLI11 REQUIRED)
-find_package(doctest REQUIRED)
-find_package(fmt REQUIRED)
-find_package(tomlplusplus REQUIRED)
-find_package(nlohmann_json REQUIRED)
-find_package(yyjson REQUIRED)
-find_package(indicators REQUIRED)
-find_package(quill REQUIRED)
-find_package(nanobench REQUIRED)
-
-if(APPLE)
-    # macOS用
-    set(ZMQ_INCLUDE_DIR "$ENV{PIXI_PROJECT_ROOT}/.pixi/envs/default/include")
-    set(ZMQ_LIBRARY "$ENV{PIXI_PROJECT_ROOT}/.pixi/envs/default/lib/libzmq.5.dylib")
-else()
-    # Linux用（Conan経由）
-    find_package(cppzmq REQUIRED)
-    find_package(zeromq REQUIRED)
-    set(ZMQ_INCLUDE_DIR ${cppzmq_INCLUDE_DIRS})
-    set(ZMQ_LIBRARY ${zeromq_LIBRARIES})
-endif()
-
 # FetchContentで導入するライブラリ
 include(FetchContent)
+include(cmake/local-or-fetch.cmake)
+
+# CLI11 - Command line parser
+declare_fetchcontent_with_local(CLI11 ext/CLI11-2.5.0
+    GIT_REPOSITORY https://github.com/CLIUtils/CLI11.git
+    GIT_TAG v2.5.0
+)
+FetchContent_MakeAvailable(CLI11)
+
+# fmt - Formatting library
+declare_fetchcontent_with_local(fmt ext/fmt-11.2.0
+    GIT_REPOSITORY https://github.com/fmtlib/fmt.git
+    GIT_TAG 11.2.0
+)
+FetchContent_MakeAvailable(fmt)
+
+# tomlplusplus - TOML configuration library
+declare_fetchcontent_with_local(tomlplusplus ext/tomlplusplus-3.4.0
+    GIT_REPOSITORY https://github.com/marzer/tomlplusplus.git
+    GIT_TAG v3.4.0
+)
+FetchContent_MakeAvailable(tomlplusplus)
+
+# nlohmann_json - JSON library
+declare_fetchcontent_with_local(nlohmann_json ext/nlohmann_json-3.12.0
+    GIT_REPOSITORY https://github.com/nlohmann/json.git
+    GIT_TAG v3.12.0
+)
+FetchContent_MakeAvailable(nlohmann_json)
+
+# yyjson - Fast JSON library
+declare_fetchcontent_with_local(yyjson ext/yyjson-0.10.0
+    GIT_REPOSITORY https://github.com/ibireme/yyjson.git
+    GIT_TAG 0.10.0
+)
+FetchContent_MakeAvailable(yyjson)
+
+# indicators - Progress bar library
+declare_fetchcontent_with_local(indicators ext/indicators-2.3
+    GIT_REPOSITORY https://github.com/p-ranav/indicators.git
+    GIT_TAG v2.3
+)
+FetchContent_MakeAvailable(indicators)
+
+# quill - Logging library
+declare_fetchcontent_with_local(quill ext/quill-10.0.1
+    GIT_REPOSITORY https://github.com/odygrd/quill.git
+    GIT_TAG v10.0.1
+)
+FetchContent_MakeAvailable(quill)
+
+# nanobench - Benchmarking library
+declare_fetchcontent_with_local(nanobench ext/nanobench-4.3.11
+    GIT_REPOSITORY https://github.com/martinus/nanobench.git
+    GIT_TAG v4.3.11
+)
+FetchContent_MakeAvailable(nanobench)
+
+# doctest - Testing framework
+set(CMAKE_POLICY_DEFAULT_CMP0091 NEW)
+set(CMAKE_POLICY_VERSION_MINIMUM 3.5 CACHE STRING "" FORCE)
+declare_fetchcontent_with_local(doctest ext/doctest-2.4.11
+    GIT_REPOSITORY https://github.com/doctest/doctest.git
+    GIT_TAG v2.4.11
+)
+FetchContent_MakeAvailable(doctest)
+
+# libzmq (ZeroMQ core library)
+set(CMAKE_POLICY_DEFAULT_CMP0077 NEW)
+declare_fetchcontent_with_local(libzmq ext/libzmq-4.3.5
+    GIT_REPOSITORY https://github.com/zeromq/libzmq.git
+    GIT_TAG v4.3.5
+)
+set(BUILD_TESTS OFF CACHE BOOL "" FORCE) # ビルド時間短縮のためテスト無効化
+set(BUILD_SHARED OFF CACHE BOOL "" FORCE) # 静的ライブラリとしてビルド
+set(BUILD_STATIC ON CACHE BOOL "" FORCE) # 静的ライブラリとしてビルド
+set(WITH_LIBSODIUM OFF CACHE BOOL "" FORCE) # libsodiumは使用しない
+set(ENABLE_CPACK OFF CACHE BOOL "" FORCE) # CPackは使用しない
+FetchContent_MakeAvailable(libzmq)
+
+# cppzmq (ZeroMQ C++ binding)
+declare_fetchcontent_with_local(cppzmq ext/cppzmq-4.11.0
+    GIT_REPOSITORY https://github.com/zeromq/cppzmq.git
+    GIT_TAG v4.11.0
+)
+set(CPPZMQ_BUILD_TESTS OFF CACHE BOOL "" FORCE) # ビルド時間短縮のためテスト無効化
+FetchContent_MakeAvailable(cppzmq)
+
+# ZeroMQ用の変数設定
+set(ZMQ_INCLUDE_DIRS
+    ${CMAKE_BINARY_DIR}/_deps/libzmq-src/include
+    ${CMAKE_BINARY_DIR}/_deps/cppzmq-src
+)
+set(ZMQ_LIBRARIES libzmq-static)
 
 # ==============================================================================
 # Main Application - メインCLIアプリケーション
@@ -124,7 +190,6 @@ add_custom_target(show-help
     COMMAND ${CMAKE_COMMAND} -E echo "  run-tests             - Run all tests"
     COMMAND ${CMAKE_COMMAND} -E echo ""
     COMMAND ${CMAKE_COMMAND} -E echo "Code quality targets:"
-    COMMAND ${CMAKE_COMMAND} -E echo "  fullcheck             - Run all quality checks"
     COMMAND ${CMAKE_COMMAND} -E echo "  format                - Format code with clang-format"
     COMMAND ${CMAKE_COMMAND} -E echo "  format-dry            - Check formatting without changes"
     COMMAND ${CMAKE_COMMAND} -E echo "  lint                  - Lint code with clang-tidy"
@@ -166,7 +231,6 @@ list(REMOVE_ITEM COMPILABLE_SOURCE_FILES ${EXT_FILES})
 include(cmake/quality-tools.cmake)
 setup_quality_tools()
 setup_quality_targets("${ALL_SOURCE_FILES}" "${COMPILABLE_SOURCE_FILES}")
-setup_quality_check_target()
 
 # ==============================================================================
 # Third-Party License Aggregation

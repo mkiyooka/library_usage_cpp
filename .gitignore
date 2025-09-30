@@ -206,3 +206,7 @@ debug/
 # Other files to ignore
 .DS_Store
 *.swp
+
+# External libraries (local cache)
+/ext/*
+!/ext/.clang-tidy

@@ -14,13 +14,7 @@ cppcheck = "==2.18.3"  # Static analysis tool
 # Build Tools
 cmake = "==4.1.1"  # Build system generator
 ninja = "==1.13.1"  # Build system
-conan = "==2.20.1"  # Package Manager
 typos = ">=1.36.3,<2"
-
-[target.osx-arm64.dependencies]
-libsodium = "==1.0.20"  # Encryption library
-cppzmq = "==4.10.0"  # C++ binding for ZeroMQ
-zeromq = "==4.3.5"  # ZeroMQ library
 
 # Linux-specific dependencies (GCC toolchain)
 [target.linux-64.dependencies]
@@ -40,23 +34,12 @@ m2-gcc-libs = "*"  # GCC runtime libraries
 libgcc-devel_win-64 = "*"  # GCC development libraries
 
 [tasks]
-# Internal tasks (hidden from pixi task list)
-_pixi-install = "pixi install"
-_conan-install = "conan install . --output-folder=build --build=missing"
-_cmake-config = "cmake --preset=release"
-_cmake-config-debug = "cmake --preset=debug"
 # Main development tasks
-config = { cmd = "pixi run _cmake-config", depends-on = [
-  "_pixi-install",
-  "_conan-install",
-] }
-config-debug = { cmd = "pixi run _cmake-config-debug", depends-on = [
-  "_pixi-install",
-  "_conan-install",
-] }
+config = "cmake --preset=release"
+config-debug = "cmake --preset=debug"
 build = "cmake --build build -j"
 test = "ctest --test-dir build"
 clean = "cmake --build build --target clean"
 format = "cmake --build build --target format"
 lint = "cmake --build build --target lint"
-fullcheck = "cmake --build build --target fullcheck"
+fullcheck = "pixi run typos && pixi run lint && pixi run run-cppcheck"

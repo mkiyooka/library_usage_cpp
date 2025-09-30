@@ -37,7 +37,7 @@ target_include_directories(json_benchmark PRIVATE ${PROJECT_SOURCE_DIR}/include)
 target_link_libraries(json_benchmark PRIVATE
     fmt::fmt
     nlohmann_json::nlohmann_json
-    yyjson::yyjson
+    yyjson
     nanobench::nanobench
 )
 
@@ -47,7 +47,7 @@ target_include_directories(json_function_test PRIVATE ${PROJECT_SOURCE_DIR}/incl
 target_link_libraries(json_function_test PRIVATE
     fmt::fmt
     nlohmann_json::nlohmann_json
-    yyjson::yyjson
+    yyjson
 )
 
 # CLI11 example with subcommands
@@ -57,12 +57,12 @@ target_link_libraries(cli11_example PRIVATE CLI11::CLI11)
 
 # ZeroMQ examples
 add_executable(zmq_server zmq_server.cpp)
-target_include_directories(zmq_server PRIVATE ${ZMQ_INCLUDE_DIR})
-target_link_libraries(zmq_server PRIVATE ${ZMQ_LIBRARY})
+target_include_directories(zmq_server PRIVATE ${ZMQ_INCLUDE_DIRS})
+target_link_libraries(zmq_server PRIVATE ${ZMQ_LIBRARIES})
 
 add_executable(zmq_client zmq_client.cpp)
-target_include_directories(zmq_client PRIVATE ${ZMQ_INCLUDE_DIR})
-target_link_libraries(zmq_client PRIVATE ${ZMQ_LIBRARY})
+target_include_directories(zmq_client PRIVATE ${ZMQ_INCLUDE_DIRS})
+target_link_libraries(zmq_client PRIVATE ${ZMQ_LIBRARIES})
 
 # プリコンパイル済みヘッダーの設定
 if(USE_PCH)

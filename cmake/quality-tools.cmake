@@ -230,32 +230,3 @@ function(setup_quality_targets SOURCE_FILES COMPILABLE_SOURCE_FILES)
         )
     endif()
 endfunction()
-
-# Setup integrated quality check target
-function(setup_quality_check_target)
-    # Create main check target
-    add_custom_target(fullcheck
-        COMMENT "Running all quality checks (format, lint, cppcheck)"
-    )
-    
-    # Add available quality targets as dependencies
-    if(TARGET format)
-        add_dependencies(fullcheck format)
-        message(STATUS "  Added 'format' to fullcheck target")
-    endif()
-    
-    if(TARGET lint)
-        add_dependencies(fullcheck lint)
-        message(STATUS "  Added 'lint' to fullcheck target")
-    endif()
-    
-    if(TARGET run-cppcheck)
-        add_dependencies(fullcheck run-cppcheck)
-        message(STATUS "  Added 'run-cppcheck' to fullcheck target")
-    endif()
-    
-    
-    message(STATUS "Quality fullcheck target 'fullcheck' configured")
-    message(STATUS "  Usage: cmake --build build --target fullcheck")
-    message(STATUS "  Available targets: format, lint, run-cppcheck, fullcheck")
-endfunction()
