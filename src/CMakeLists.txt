@@ -55,6 +55,15 @@ add_executable(cli11_example cli11_example.cpp cli11_commands.cpp)
 target_include_directories(cli11_example PRIVATE ${PROJECT_SOURCE_DIR}/include)
 target_link_libraries(cli11_example PRIVATE CLI11::CLI11)
 
+# ZeroMQ examples
+add_executable(zmq_server zmq_server.cpp)
+target_include_directories(zmq_server PRIVATE ${ZMQ_INCLUDE_DIR})
+target_link_libraries(zmq_server PRIVATE ${ZMQ_LIBRARY})
+
+add_executable(zmq_client zmq_client.cpp)
+target_include_directories(zmq_client PRIVATE ${ZMQ_INCLUDE_DIR})
+target_link_libraries(zmq_client PRIVATE ${ZMQ_LIBRARY})
+
 # プリコンパイル済みヘッダーの設定
 if(USE_PCH)
     target_precompile_headers(cmd PRIVATE

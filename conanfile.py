@@ -12,9 +12,15 @@ class TemplateCLICppConan(ConanFile):
         self.requires("nlohmann_json/3.12.0")  # JSON library
         self.requires("yyjson/0.10.0")  # JSON library
         # self.requires("glaze/5.4.1")  # JSON library C++23
-        self.requires ("indicators/2.3")  # Progress bar library
+        self.requires("indicators/2.3")  # Progress bar library
         self.requires("quill/10.0.1")  # Logging library
+        self.requires("nanobench/4.3.11")  # Benchmarking library
         self.requires("doctest/2.4.11")  # Testing framework
+
+        # OS に応じて cppzmq/zeromq を有効化
+        if self.settings.os == "Linux":
+            self.requires("cppzmq/4.11.0")  # C++ binding for ZeroMQ (using FetchContent)
+            # self.requires("zeromq/4.3.5")  # ZeroMQ library (using FetchContent)
 
     def layout(self):
         # ルートディレクトリのbuildフォルダを使用

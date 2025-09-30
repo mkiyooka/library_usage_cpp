@@ -61,17 +61,22 @@ find_package(nlohmann_json REQUIRED)
 find_package(yyjson REQUIRED)
 find_package(indicators REQUIRED)
 find_package(quill REQUIRED)
+find_package(nanobench REQUIRED)
+
+if(APPLE)
+    # macOS用
+    set(ZMQ_INCLUDE_DIR "$ENV{PIXI_PROJECT_ROOT}/.pixi/envs/default/include")
+    set(ZMQ_LIBRARY "$ENV{PIXI_PROJECT_ROOT}/.pixi/envs/default/lib/libzmq.5.dylib")
+else()
+    # Linux用（Conan経由）
+    find_package(cppzmq REQUIRED)
+    find_package(zeromq REQUIRED)
+    set(ZMQ_INCLUDE_DIR ${cppzmq_INCLUDE_DIRS})
+    set(ZMQ_LIBRARY ${zeromq_LIBRARIES})
+endif()
 
 # FetchContentで導入するライブラリ
 include(FetchContent)
-
-# nanobench for benchmarking
-FetchContent_Declare(
-    nanobench
-    GIT_REPOSITORY https://github.com/martinus/nanobench.git
-    GIT_TAG v4.3.11
-)
-FetchContent_MakeAvailable(nanobench)
 
 # ==============================================================================
 # Main Application - メインCLIアプリケーション
