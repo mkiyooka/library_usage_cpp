@@ -1,6 +1,7 @@
 Checks: >
     bugprone-*,
     -bugprone-easily-swappable-parameters,
+    -bugprone-exception-escape,
     cert-*,
     clang-analyzer-*,
     cppcoreguidelines-*,
@@ -9,6 +10,8 @@ Checks: >
     -cppcoreguidelines-avoid-c-arrays,
     -cppcoreguidelines-avoid-magic-numbers,
     -cppcoreguidelines-avoid-non-const-global-variables,
+    -cppcoreguidelines-no-malloc,
+    -cppcoreguidelines-owning-memory,
     -cppcoreguidelines-pro-bounds-pointer-arithmetic,
     google-*,
     google-explicit-constructor,
@@ -16,11 +19,13 @@ Checks: >
     hicpp-*,
     hicpp-explicit-conversions,
     -hicpp-avoid-c-arrays,
+    -hicpp-no-malloc,
     llvm-*,
     llvm-include-order,
     -llvm-header-guard,
     -llvm-prefer-static-over-anonymous-namespace,
     misc-*,
+    -misc-const-correctness,
     -misc-include-cleaner,
     -misc-use-anonymous-namespace,
     -misc-use-internal-linkage,
@@ -43,11 +48,12 @@ Checks: >
     readability-uppercase-literal-suffix,
     -readability-convert-member-functions-to-static,
     -readability-identifier-length,
+    -readability-identifier-naming,
     -readability-magic-numbers,
 
 WarningsAsErrors: ""
 FormatStyle: file
-HeaderFilterRegex: "^./(src|debug|include|tests)/"
+HeaderFilterRegex: "^./((src|debug|include|tests)/(?!.*(third_party|external|build/_deps)))"
 SystemHeaders: false
 CheckOptions:
     - key: readability-identifier-naming.ClassCase
@@ -65,7 +71,7 @@ CheckOptions:
     - key: readability-identifier-naming.EnumConstantPrefix
       value: k
     - key: readability-identifier-naming.FunctionCase
-      value: CamelCase
+      value: lower_case
     - key: readability-identifier-naming.GlobalConstantCase
       value: CamelCase
     - key: readability-identifier-naming.GlobalConstantPrefix

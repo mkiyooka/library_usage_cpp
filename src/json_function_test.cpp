@@ -1,10 +1,11 @@
 #include <chrono>
-#include <fmt/format.h>
 #include <functional>
 #include <iostream>
-#include <nlohmann/json.hpp>
 #include <string>
 #include <vector>
+
+#include <fmt/format.h>
+#include <nlohmann/json.hpp>
 #include <yyjson.h>
 
 #include "json_wrapper/yyjson_wrapper.hpp"

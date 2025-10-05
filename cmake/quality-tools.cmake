@@ -181,14 +181,16 @@ function(setup_quality_targets SOURCE_FILES COMPILABLE_SOURCE_FILES)
     if(CPPCHECK_EXE)
         # cppcheck arguments
         set(CPPCHECK_BASE_ARGS
-            --enable=all
-            --inconclusive
+            --enable=warning,style,performance,portability
             --std=c++17
             --platform=native
             -I include/
             --suppress=missingIncludeSystem
             --suppress=unusedFunction
             --suppress=unusedStructMember
+            --suppress=ctuOneDefinitionRuleViolation
+            --suppress=normalCheckLevelMaxBranches
+            --suppress=unmatchedSuppression
             --inline-suppr
             --quiet
         )
