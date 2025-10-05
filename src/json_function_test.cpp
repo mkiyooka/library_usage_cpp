@@ -20,7 +20,8 @@ struct TestData {
     std::vector<std::string> string_array = {"item1", "item2", "アイテム3"};
 
     // ネスト構造用
-    int nested_num1 = 10, nested_num2 = 20;
+    int nested_num1 = 10;
+    int nested_num2 = 20;
     std::string nested_str1 = "first_string";
     std::string nested_str2 = "second_string";
     std::string timestamp = "2025-09-17T15:19:52.854500UTC";
