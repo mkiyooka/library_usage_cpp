@@ -21,6 +21,12 @@ cmake = "==4.1.1"  # Build system generator
 ninja = "==1.13.1"  # Build system
 typos = ">=1.36.3,<2"  # Spell checker
 sccache = ">=0.10.0,<0.11"  # C/C++ compiler cache
+libgrpc = ">=1.74.1,<2"  # gRPC library
+libprotobuf = ">=6.31.1,<7"  # Protocol Buffers library
+python = ">=3.11,<3.13"  # Python interpreter
+grpcio = ">=1.60.0,<2"  # Python gRPC library
+grpcio-tools = ">=1.60.0,<2"  # Python gRPC tools (protoc)
+pyzmq = ">=26.0.0,<27"  # Python ZeroMQ bindings
 
 [target.linux-64.dependencies]
 gcc = "==15.1.0"  # GCC compiler
@@ -38,9 +44,9 @@ libgcc-devel_win-64 = "==15.1.0"  # GCC development libraries
 
 [tasks]
 # Main development tasks
-config = "cmake --preset=release"
-config-debug = "cmake --preset=debug"
-build = "cmake --build build -j 8"
+config = { cmd = "cmake --preset=release", env = { PKG_CONFIG_PATH = ".pixi/envs/default/lib/pkgconfig" } }
+config-debug = { cmd = "cmake --preset=debug", env = { PKG_CONFIG_PATH = ".pixi/envs/default/lib/pkgconfig" } }
+build = { cmd = "cmake --build build -j 8", env = { PKG_CONFIG_PATH = ".pixi/envs/default/lib/pkgconfig" } }
 test = "ctest --test-dir build"
 clean = "cmake --build build --target clean"
 format = "cmake --build build --target format"

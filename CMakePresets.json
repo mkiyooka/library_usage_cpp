@@ -15,7 +15,8 @@
             "description": "Release build configuration (optimized)",
             "inherits": "base",
             "cacheVariables": {
-                "CMAKE_BUILD_TYPE": "Release"
+                "CMAKE_BUILD_TYPE": "Release",
+                "PKG_CONFIG_PATH": "${sourceDir}/.pixi/envs/default/lib/pkgconfig"
             }
         },
         {
