@@ -47,12 +47,12 @@ set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
 
-# コンパイルの高速化（sccache利用可能時）
-find_program(SCCACHE_EXE sccache)
-if(SCCACHE_EXE)
-    set(CMAKE_CXX_COMPILER_LAUNCHER sccache)
-    set(CMAKE_C_COMPILER_LAUNCHER sccache)
-    message(STATUS "Using sccache: ${SCCACHE_EXE}")
+# コンパイルの高速化（ccache利用可能時）
+find_program(CCACHE_EXE ccache)
+if(CCACHE_EXE)
+    set(CMAKE_CXX_COMPILER_LAUNCHER ccache)
+    set(CMAKE_C_COMPILER_LAUNCHER ccache)
+    message(STATUS "Using ccache: ${CCACHE_EXE}")
 endif()
 option(USE_PCH "Use precompiled headers" OFF)
 # リンカ変更
