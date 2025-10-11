@@ -45,13 +45,14 @@ function(add_external_package LIBRARY_NAME LOCAL_PATH)
         message(STATUS "Downloading ${LIBRARY_NAME} from ${ARG_URL}")
         if(DEFINED ARG_URL_HASH)
             FetchContent_Declare(${LIBRARY_NAME}
-                DOWNLOAD_EXTRACT_TIMESTAMP ON
                 URL ${ARG_URL}
                 URL_HASH ${ARG_URL_HASH}
+                DOWNLOAD_EXTRACT_TIMESTAMP ON
             )
         else()
             FetchContent_Declare(${LIBRARY_NAME}
                 URL ${ARG_URL}
+                DOWNLOAD_EXTRACT_TIMESTAMP ON
             )
         endif()
     elseif(DEFINED ARG_GIT_REPOSITORY)
