@@ -45,6 +45,7 @@ function(add_external_package LIBRARY_NAME LOCAL_PATH)
         message(STATUS "Downloading ${LIBRARY_NAME} from ${ARG_URL}")
         if(DEFINED ARG_URL_HASH)
             FetchContent_Declare(${LIBRARY_NAME}
+                DOWNLOAD_EXTRACT_TIMESTAMP ON
                 URL ${ARG_URL}
                 URL_HASH ${ARG_URL_HASH}
             )
