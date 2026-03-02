@@ -15,9 +15,9 @@ add_external_package(CLI11 third_party/CLI11-2.5.0
 FetchContent_MakeAvailable(CLI11)
 
 # fmt - Formatting library
-add_external_package(fmt third_party/fmt-11.2.0
-    URL https://github.com/fmtlib/fmt/archive/refs/tags/11.2.0.tar.gz
-    URL_HASH SHA256=bc23066d87ab3168f27cef3e97d545fa63314f5c79df5ea444d41d56f962c6af
+add_external_package(fmt third_party/fmt-12.0.0
+    URL https://github.com/fmtlib/fmt/archive/refs/tags/12.0.0.tar.gz
+    URL_HASH SHA256=aa3e8fbb6a0066c03454434add1f1fc23299e85758ceec0d7d2d974431481e40
 )
 FetchContent_MakeAvailable(fmt)
 
@@ -36,9 +36,9 @@ add_external_package(nlohmann_json third_party/nlohmann_json-3.12.0
 FetchContent_MakeAvailable(nlohmann_json)
 
 # yyjson - Fast JSON library
-add_external_package(yyjson third_party/yyjson-0.10.0
-    URL https://github.com/ibireme/yyjson/archive/refs/tags/0.10.0.tar.gz
-    URL_HASH SHA256=0d901cb2c45c5586e3f3a4245e58c2252d6b24bf4b402723f6179523d389b165
+add_external_package(yyjson third_party/yyjson-0.12.0
+    URL https://github.com/ibireme/yyjson/archive/refs/tags/0.12.0.tar.gz
+    URL_HASH SHA256=b16246f617b2a136c78d73e5e2647c6f1de1313e46678062985bdcf1f40bb75d
 )
 FetchContent_MakeAvailable(yyjson)
 
@@ -50,11 +50,21 @@ add_external_package(indicators third_party/indicators-2.3
 FetchContent_MakeAvailable(indicators)
 
 # quill - Logging library
-add_external_package(quill third_party/quill-10.0.1
-    URL https://github.com/odygrd/quill/archive/refs/tags/v10.0.1.tar.gz
-    URL_HASH SHA256=ec7c0291d8b6533fc6e01d8e6694c5fcc3c803109b7397197c2c7ebd0107129f
+add_external_package(quill third_party/quill-11.0.2
+    URL https://github.com/odygrd/quill/archive/refs/tags/v11.0.2.tar.gz
+    URL_HASH SHA256=c4208f717e62fc4a7178917c9c39dbb90276d72c3cefd9077d0b973365d72667
 )
 FetchContent_MakeAvailable(quill)
+
+# spdlog - Fast C++ logging library
+# SPDLOG_FMT_EXTERNAL=ON: spdlog のバンドル fmt を使わず、
+# 上記で導入済みの fmt::fmt を共有する（ODR違反・二重定義を防ぐ）
+set(SPDLOG_FMT_EXTERNAL ON CACHE BOOL "" FORCE)
+add_external_package(spdlog third_party/spdlog-1.17.0
+    URL https://github.com/gabime/spdlog/archive/refs/tags/v1.17.0.tar.gz
+    URL_HASH SHA256=d8862955c6d74e5846b3f580b1605d2428b11d97a410d86e2fb13e857cd3a744
+)
+FetchContent_MakeAvailable(spdlog)
 
 # nanobench - Benchmarking library
 add_external_package(nanobench third_party/nanobench-4.3.11
