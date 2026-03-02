@@ -27,6 +27,10 @@ target_link_libraries(json_writer PRIVATE nlohmann_json::nlohmann_json)
 add_executable(quill_example quill_example.cpp)
 target_link_libraries(quill_example PRIVATE quill::quill)
 
+# Spdlog logging example
+add_executable(spdlog_example spdlog_example.cpp)
+target_link_libraries(spdlog_example PRIVATE spdlog::spdlog)
+
 # Indicators progress bar example
 add_executable(indicator_example indicator_example.cpp)
 target_link_libraries(indicator_example PRIVATE indicators::indicators)
@@ -64,87 +68,89 @@ add_executable(zmq_client zmq_client.cpp)
 target_include_directories(zmq_client PRIVATE ${ZMQ_INCLUDE_DIRS})
 target_link_libraries(zmq_client PRIVATE ${ZMQ_LIBRARIES})
 
-# gRPC examples (pixiで導入したgRPCを使用)
-# pkg-configを使ってgRPCとprotobufを見つける
-find_package(PkgConfig REQUIRED)
-pkg_check_modules(GRPCPP REQUIRED grpc++)
-pkg_check_modules(PROTOBUF REQUIRED protobuf)
+# gRPC examples (ENABLE_GRPC=ONのときのみビルド)
+if(ENABLE_GRPC)
+    # pkg-configを使ってgRPCとprotobufを見つける
+    find_package(PkgConfig REQUIRED)
+    pkg_check_modules(GRPCPP REQUIRED grpc++)
+    pkg_check_modules(PROTOBUF REQUIRED protobuf)
 
-# protoファイルからC++ソースを生成
-get_filename_component(greeter_proto "${CMAKE_SOURCE_DIR}/proto/greeter.proto" ABSOLUTE)
-get_filename_component(greeter_proto_path "${greeter_proto}" PATH)
+    # protoファイルからC++ソースを生成
+    get_filename_component(greeter_proto "${CMAKE_SOURCE_DIR}/proto/greeter.proto" ABSOLUTE)
+    get_filename_component(greeter_proto_path "${greeter_proto}" PATH)
 
-# 生成されるファイルのパス
-set(greeter_proto_srcs "${CMAKE_CURRENT_BINARY_DIR}/greeter.pb.cc")
-set(greeter_proto_hdrs "${CMAKE_CURRENT_BINARY_DIR}/greeter.pb.h")
-set(greeter_grpc_srcs "${CMAKE_CURRENT_BINARY_DIR}/greeter.grpc.pb.cc")
-set(greeter_grpc_hdrs "${CMAKE_CURRENT_BINARY_DIR}/greeter.grpc.pb.h")
+    # 生成されるファイルのパス
+    set(greeter_proto_srcs "${CMAKE_CURRENT_BINARY_DIR}/greeter.pb.cc")
+    set(greeter_proto_hdrs "${CMAKE_CURRENT_BINARY_DIR}/greeter.pb.h")
+    set(greeter_grpc_srcs "${CMAKE_CURRENT_BINARY_DIR}/greeter.grpc.pb.cc")
+    set(greeter_grpc_hdrs "${CMAKE_CURRENT_BINARY_DIR}/greeter.grpc.pb.h")
 
-# protocとgrpc_cpp_pluginの実行ファイルを探す
-find_program(PROTOC_EXECUTABLE protoc REQUIRED)
-find_program(GRPC_CPP_PLUGIN grpc_cpp_plugin REQUIRED)
+    # protocとgrpc_cpp_pluginの実行ファイルを探す
+    find_program(PROTOC_EXECUTABLE protoc REQUIRED)
+    find_program(GRPC_CPP_PLUGIN grpc_cpp_plugin REQUIRED)
 
-# protobufとgRPCのコード生成コマンド
-add_custom_command(
-    OUTPUT "${greeter_proto_srcs}" "${greeter_proto_hdrs}" "${greeter_grpc_srcs}" "${greeter_grpc_hdrs}"
-    COMMAND ${PROTOC_EXECUTABLE}
-    ARGS --grpc_out "${CMAKE_CURRENT_BINARY_DIR}"
-         --cpp_out "${CMAKE_CURRENT_BINARY_DIR}"
-         -I "${greeter_proto_path}"
-         --plugin=protoc-gen-grpc=${GRPC_CPP_PLUGIN}
-         "${greeter_proto}"
-    DEPENDS "${greeter_proto}"
-    COMMENT "Generating gRPC code from greeter.proto"
-)
+    # protobufとgRPCのコード生成コマンド
+    add_custom_command(
+        OUTPUT "${greeter_proto_srcs}" "${greeter_proto_hdrs}" "${greeter_grpc_srcs}" "${greeter_grpc_hdrs}"
+        COMMAND ${PROTOC_EXECUTABLE}
+        ARGS --grpc_out "${CMAKE_CURRENT_BINARY_DIR}"
+             --cpp_out "${CMAKE_CURRENT_BINARY_DIR}"
+             -I "${greeter_proto_path}"
+             --plugin=protoc-gen-grpc=${GRPC_CPP_PLUGIN}
+             "${greeter_proto}"
+        DEPENDS "${greeter_proto}"
+        COMMENT "Generating gRPC code from greeter.proto"
+    )
 
-# 生成されたprotoファイルをライブラリ化
-add_library(greeter_grpc_proto
-    ${greeter_proto_srcs}
-    ${greeter_proto_hdrs}
-    ${greeter_grpc_srcs}
-    ${greeter_grpc_hdrs}
-)
-target_include_directories(greeter_grpc_proto PUBLIC
-    ${CMAKE_CURRENT_BINARY_DIR}
-    ${GRPCPP_INCLUDE_DIRS}
-    ${PROTOBUF_INCLUDE_DIRS}
-)
-target_link_libraries(greeter_grpc_proto
-    ${GRPCPP_LIBRARIES}
-    ${PROTOBUF_LIBRARIES}
-)
+    # 生成されたprotoファイルをライブラリ化
+    add_library(greeter_grpc_proto
+        ${greeter_proto_srcs}
+        ${greeter_proto_hdrs}
+        ${greeter_grpc_srcs}
+        ${greeter_grpc_hdrs}
+    )
+    target_include_directories(greeter_grpc_proto PUBLIC
+        ${CMAKE_CURRENT_BINARY_DIR}
+        ${GRPCPP_INCLUDE_DIRS}
+        ${PROTOBUF_INCLUDE_DIRS}
+    )
+    target_link_libraries(greeter_grpc_proto
+        ${GRPCPP_LIBRARIES}
+        ${PROTOBUF_LIBRARIES}
+    )
 
-# gRPCサーバー
-add_executable(grpc_server grpc_server.cpp)
-target_include_directories(grpc_server PRIVATE
-    ${GRPCPP_INCLUDE_DIRS}
-    ${PROTOBUF_INCLUDE_DIRS}
-)
-target_link_directories(grpc_server PRIVATE
-    ${GRPCPP_LIBRARY_DIRS}
-    ${PROTOBUF_LIBRARY_DIRS}
-)
-target_link_libraries(grpc_server PRIVATE
-    greeter_grpc_proto
-    ${GRPCPP_LIBRARIES}
-    ${PROTOBUF_LIBRARIES}
-)
+    # gRPCサーバー
+    add_executable(grpc_server grpc_server.cpp)
+    target_include_directories(grpc_server PRIVATE
+        ${GRPCPP_INCLUDE_DIRS}
+        ${PROTOBUF_INCLUDE_DIRS}
+    )
+    target_link_directories(grpc_server PRIVATE
+        ${GRPCPP_LIBRARY_DIRS}
+        ${PROTOBUF_LIBRARY_DIRS}
+    )
+    target_link_libraries(grpc_server PRIVATE
+        greeter_grpc_proto
+        ${GRPCPP_LIBRARIES}
+        ${PROTOBUF_LIBRARIES}
+    )
 
-# gRPCクライアント
-add_executable(grpc_client grpc_client.cpp)
-target_include_directories(grpc_client PRIVATE
-    ${GRPCPP_INCLUDE_DIRS}
-    ${PROTOBUF_INCLUDE_DIRS}
-)
-target_link_directories(grpc_client PRIVATE
-    ${GRPCPP_LIBRARY_DIRS}
-    ${PROTOBUF_LIBRARY_DIRS}
-)
-target_link_libraries(grpc_client PRIVATE
-    greeter_grpc_proto
-    ${GRPCPP_LIBRARIES}
-    ${PROTOBUF_LIBRARIES}
-)
+    # gRPCクライアント
+    add_executable(grpc_client grpc_client.cpp)
+    target_include_directories(grpc_client PRIVATE
+        ${GRPCPP_INCLUDE_DIRS}
+        ${PROTOBUF_INCLUDE_DIRS}
+    )
+    target_link_directories(grpc_client PRIVATE
+        ${GRPCPP_LIBRARY_DIRS}
+        ${PROTOBUF_LIBRARY_DIRS}
+    )
+    target_link_libraries(grpc_client PRIVATE
+        greeter_grpc_proto
+        ${GRPCPP_LIBRARIES}
+        ${PROTOBUF_LIBRARIES}
+    )
+endif() # ENABLE_GRPC
 
 # プリコンパイル済みヘッダーの設定
 if(USE_PCH)

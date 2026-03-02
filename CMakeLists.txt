@@ -68,6 +68,9 @@ endif()
 
 include_directories(include)
 
+# gRPCサンプルを有効化するオプション（ダウンロード・ビルドに時間を要するためデフォルト無効）
+option(ENABLE_GRPC "Enable gRPC examples (requires pixi environment with libgrpc)" OFF)
+
 # サードパーティライブラリの導入
 include(FetchContent)
 include(cmake/local-or-fetch.cmake)
@@ -80,6 +83,9 @@ include(cmake/dependencies-test.cmake)
 
 # メインのソースディレクトリ
 add_subdirectory(src)
+
+# ベンチマーク
+add_subdirectory(benches)
 
 # Add debug flags for Debug and RelWithDebInfo builds
 if (CMAKE_BUILD_TYPE STREQUAL "Debug")
