@@ -215,3 +215,6 @@ debug/
 *.xlsx
 *.bin
 measurement.json
+
+# ApprovalTests received files (temporary diff output)
+*.received.txt
