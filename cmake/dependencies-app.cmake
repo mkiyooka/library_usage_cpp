@@ -66,6 +66,15 @@ add_external_package(spdlog third_party/spdlog-1.17.0
 )
 FetchContent_MakeAvailable(spdlog)
 
+# yaml-cpp - YAML parser and emitter
+add_external_package(yaml-cpp third_party/yaml-cpp-0.9.0
+    URL https://github.com/jbeder/yaml-cpp/archive/refs/tags/yaml-cpp-0.9.0.tar.gz
+    URL_HASH SHA256=25cb043240f828a8c51beb830569634bc7ac603978e0f69d6b63558dadefd49a
+)
+set(YAML_CPP_BUILD_TESTS OFF CACHE BOOL "" FORCE)
+set(YAML_CPP_BUILD_TOOLS OFF CACHE BOOL "" FORCE)
+FetchContent_MakeAvailable(yaml-cpp)
+
 # nanobench - Benchmarking library
 add_external_package(nanobench third_party/nanobench-4.3.11
     URL https://github.com/martinus/nanobench/archive/refs/tags/v4.3.11.tar.gz

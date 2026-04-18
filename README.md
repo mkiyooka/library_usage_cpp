@@ -19,6 +19,7 @@ C++ライブラリの使用例を集めたサンプルプロジェクトです�
 - **indicators**: プログレスバー表示
 - **quill**: 高性能ログ出力
 - **spdlog**: 高速C++ログ出力
+- **yaml-cpp**: YAMLパーサー・エミッター
 - **nanobench**: ベンチマーク測定
 - **doctest**: テストフレームワーク
 - **cppzmq / libzmq**: ZeroMQメッセージング
@@ -73,6 +74,9 @@ cmake --build build -j 8
 
 # ログ出力（spdlog）
 ./build/spdlog_example
+
+# YAML設定ファイル読み込み
+./build/yaml_example
 
 # ZeroMQメッセージング（別々のターミナルで実行）
 ./build/zmq_server

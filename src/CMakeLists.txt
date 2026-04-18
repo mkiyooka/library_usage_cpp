@@ -59,6 +59,10 @@ add_executable(cli11_example cli11_example.cpp cli11_commands.cpp)
 target_include_directories(cli11_example PRIVATE ${PROJECT_SOURCE_DIR}/include)
 target_link_libraries(cli11_example PRIVATE CLI11::CLI11)
 
+# YAML example
+add_executable(yaml_example yaml_example.cpp)
+target_link_libraries(yaml_example PRIVATE yaml-cpp::yaml-cpp)
+
 # ZeroMQ examples
 add_executable(zmq_server zmq_server.cpp)
 target_include_directories(zmq_server PRIVATE ${ZMQ_INCLUDE_DIRS})
