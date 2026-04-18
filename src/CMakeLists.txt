@@ -156,6 +156,79 @@ if(ENABLE_GRPC)
     )
 endif() # ENABLE_GRPC
 
+# Eigen example
+add_executable(eigen_example eigen_example.cpp)
+target_link_libraries(eigen_example PRIVATE Eigen3::Eigen)
+
+# EigenRand example (header-only, depends on Eigen)
+add_executable(eigenrand_example eigenrand_example.cpp)
+target_include_directories(eigenrand_example PRIVATE ${EigenRand_SOURCE_DIR})
+target_link_libraries(eigenrand_example PRIVATE Eigen3::Eigen)
+
+# xtensor example
+add_executable(xtensor_example xtensor_example.cpp)
+target_link_libraries(xtensor_example PRIVATE xtensor)
+
+# Armadillo example (header-only mode with Accelerate on macOS)
+add_executable(armadillo_example armadillo_example.cpp)
+target_include_directories(armadillo_example PRIVATE
+    ${armadillo_SOURCE_DIR}/include
+)
+if(APPLE)
+    target_link_libraries(armadillo_example PRIVATE "-framework Accelerate")
+else()
+    find_package(BLAS QUIET)
+    find_package(LAPACK QUIET)
+    if(BLAS_FOUND AND LAPACK_FOUND)
+        target_link_libraries(armadillo_example PRIVATE ${BLAS_LIBRARIES} ${LAPACK_LIBRARIES})
+    endif()
+endif()
+
+# xsimd example
+add_executable(xsimd_example xsimd_example.cpp)
+target_link_libraries(xsimd_example PRIVATE xsimd)
+
+# Highway example
+add_executable(highway_example highway_example.cpp)
+target_link_libraries(highway_example PRIVATE hwy)
+
+# Kokkos example
+add_executable(kokkos_example kokkos_example.cpp)
+target_link_libraries(kokkos_example PRIVATE Kokkos::kokkos)
+
+# pocketfft example (header-only)
+add_executable(pocketfft_example pocketfft_example.cpp)
+target_include_directories(pocketfft_example PRIVATE ${pocketfft_SOURCE_DIR})
+
+# NLopt example
+add_executable(nlopt_example nlopt_example.cpp)
+target_link_libraries(nlopt_example PRIVATE nlopt)
+
+# Ceres example
+add_executable(ceres_example ceres_example.cpp)
+target_link_libraries(ceres_example PRIVATE Ceres::ceres)
+
+# OpenXLSX example
+add_executable(openxlsx_example openxlsx_example.cpp)
+target_link_libraries(openxlsx_example PRIVATE OpenXLSX::OpenXLSX)
+
+# cereal example (header-only)
+add_executable(cereal_example cereal_example.cpp)
+target_link_libraries(cereal_example PRIVATE cereal::cereal)
+
+# HDF5 C++ example
+add_executable(hdf5_example hdf5_example.cpp)
+target_link_libraries(hdf5_example PRIVATE hdf5_cpp-static hdf5-static)
+target_include_directories(hdf5_example PRIVATE
+    ${hdf5_BINARY_DIR}
+    ${hdf5_SOURCE_DIR}/src
+    ${hdf5_SOURCE_DIR}/c++/src
+)
+
+# Matplot++ example
+add_executable(matplot_example matplot_example.cpp)
+target_link_libraries(matplot_example PRIVATE matplot)
+
 # プリコンパイル済みヘッダーの設定
 if(USE_PCH)
     target_precompile_headers(cmd PRIVATE
