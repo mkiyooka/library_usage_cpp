@@ -6,16 +6,17 @@
 
 #include "greeter.grpc.pb.h"
 
-using grpc::Channel;
-using grpc::ClientContext;
-using grpc::Status;
 using greeter::Greeter;
 using greeter::HelloReply;
 using greeter::HelloRequest;
+using grpc::Channel;
+using grpc::ClientContext;
+using grpc::Status;
 
 class GreeterClient {
 public:
-    GreeterClient(std::shared_ptr<Channel> channel) : stub_(Greeter::NewStub(channel)) {}
+    GreeterClient(std::shared_ptr<Channel> channel)
+        : stub_(Greeter::NewStub(channel)) {}
 
     // サーバーにリクエストを送信
     std::string SayHello(const std::string &user) {
