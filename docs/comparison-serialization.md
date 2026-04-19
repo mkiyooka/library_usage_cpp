@@ -3,7 +3,7 @@
 ## 概要
 
 | 項目 | msgpack-c | Cap'n Proto | FlatBuffers | cereal |
-|------|-----------|-------------|-------------|--------|
+| ---- | --------- | ----------- | ----------- | ------ |
 | バージョン | 7.0.0 | 1.1.0 | v25.12.19 | 1.3.2 |
 | ライセンス | BSL-1.0 | MIT | Apache-2.0 | BSD-3-Clause |
 | フォーマット | MessagePack (バイナリ) | Cap'n Proto (バイナリ) | FlatBuffers (バイナリ) | JSON / バイナリ / XML |
@@ -18,7 +18,7 @@
 計測環境: macOS, Apple M2, Release ビルド, Celero benchmark
 
 | ライブラリ | us/iteration | 相対速度 (cereal=1.0) |
-|-----------|-------------|----------------------|
+| --------- | ------------ | -------------------- |
 | cereal (binary) | 5.69 | 1.00x (baseline) |
 | msgpack | 4.28 | 1.33x |
 | FlatBuffers | 3.18 | 1.79x |
@@ -157,7 +157,7 @@ std::istringstream iss(oss.str());
 ## CMake 統合の複雑さ
 
 | ライブラリ | CMake 統合 | コード生成 |
-|-----------|-----------|----------|
+| --------- | --------- | -------- |
 | cereal | `FetchContent` のみ | 不要 |
 | msgpack | `FetchContent` のみ | 不要 |
 | Cap'n Proto | `FetchContent` + `CMAKE_CXX_EXTENSIONS ON` | `capnp compile -oc++` (PATH設定要) |
@@ -166,7 +166,7 @@ std::istringstream iss(oss.str());
 ## 後方互換性
 
 | ライブラリ | フィールド追加 | フィールド削除 | フィールド型変更 |
-|-----------|------------|------------|--------------|
+| --------- | ------------ | ------------ | -------------- |
 | cereal | △ (バイナリは困難) | ❌ | ❌ |
 | msgpack | △ (位置依存) | ❌ | ❌ |
 | Cap'n Proto | ✅ (番号で管理) | ✅ (廃止フィールド保持) | ❌ |
@@ -175,7 +175,7 @@ std::istringstream iss(oss.str());
 ## 選択指針
 
 | ユースケース | 推奨 |
-|------------|-----|
+| ---------- | --- |
 | C++ 内部データ保存（人間可読 JSON も欲しい） | **cereal** |
 | 軽量 IPC・多言語間通信 | **msgpack-c** |
 | 高性能 RPC・プロセス間大量データ転送 | **Cap'n Proto** |

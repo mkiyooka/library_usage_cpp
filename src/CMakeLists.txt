@@ -286,9 +286,14 @@ target_link_libraries(capnproto_example PRIVATE CapnProto::capnp)
 add_executable(csv_example csv_example.cpp)
 target_link_libraries(csv_example PRIVATE csv)
 
-# NNG example
-add_executable(nng_example nng_example.cpp)
-target_link_libraries(nng_example PRIVATE nng)
+# NNG example (legacy C API - removed, replaced by nngpp)
+
+# nngpp Req/Rep server and client
+add_executable(nngpp_server nngpp_server.cpp)
+target_link_libraries(nngpp_server PRIVATE nngpp)
+
+add_executable(nngpp_client nngpp_client.cpp)
+target_link_libraries(nngpp_client PRIVATE nngpp)
 
 # FlatBuffers example (IDL → C++ ヘッダー生成)
 set(FBS_SCHEMA ${CMAKE_SOURCE_DIR}/proto/person.fbs)

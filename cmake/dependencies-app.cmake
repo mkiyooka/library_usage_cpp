@@ -429,6 +429,20 @@ FetchContent_Declare(nng
 )
 FetchContent_MakeAvailable(nng)
 
+# nngpp - C++ wrapper for NNG (header-only, MIT)
+FetchContent_Declare(nngpp
+    URL https://github.com/cwzx/nngpp/archive/refs/heads/master.tar.gz
+    URL_HASH SHA256=bd2e01d73df488eee81c3388aa7cf6720f8f7d793e6f49de0bcd20b286c28fd1
+    DOWNLOAD_EXTRACT_TIMESTAMP ON
+)
+FetchContent_GetProperties(nngpp)
+if(NOT nngpp_POPULATED)
+    FetchContent_Populate(nngpp)
+endif()
+add_library(nngpp INTERFACE)
+target_include_directories(nngpp INTERFACE ${nngpp_SOURCE_DIR}/include)
+target_link_libraries(nngpp INTERFACE nng)
+
 # FlatBuffers - Serialization (Apache-2.0)
 set(FLATBUFFERS_BUILD_TESTS OFF CACHE BOOL "" FORCE)
 set(FLATBUFFERS_BUILD_FLATC ON CACHE BOOL "" FORCE)

@@ -3,7 +3,7 @@
 ## 概要
 
 | 項目 | ZeroMQ (cppzmq) | NNG |
-|------|----------------|-----|
+| ---- | --------------- | --- |
 | バージョン | cppzmq 4.11.0 / libzmq 4.3.5 | v1.11 |
 | ライセンス | MIT / MPL-2.0 | MIT |
 | 言語 | C++ ラッパー (cppzmq) | C API (+ 非公式 C++ ラッパー) |
@@ -18,7 +18,7 @@
 ## サポートパターン
 
 | パターン | ZeroMQ | NNG |
-|---------|--------|-----|
+| ------- | ------ | --- |
 | Req/Rep | ✅ | ✅ |
 | Pub/Sub | ✅ | ✅ |
 | Push/Pull | ✅ | ✅ |
@@ -48,35 +48,47 @@ zmq::message_t reply;
 sock.recv(reply);
 ```
 
-### NNG - Req/Rep
+### NNG + nngpp (C++ ラッパー) - Req/Rep
 
 ```cpp
-// サーバー
-nng_socket rep_sock;
-nng_rep0_open(&rep_sock);
-nng_listen(rep_sock, "tcp://*:5555", nullptr, 0);
-nng_msg* msg;
-nng_recvmsg(rep_sock, &msg, 0);
-std::string body(static_cast<char*>(nng_msg_body(msg)), nng_msg_len(msg));
-nng_msg_free(msg);
-nng_msg* rmsg; nng_msg_alloc(&rmsg, 0);
-nng_msg_append(rmsg, "pong", 4);
-nng_sendmsg(rep_sock, rmsg, 0);
+// サーバー (src/nngpp_server.cpp)
+#include <nngpp/nngpp.h>
+#include <nngpp/protocol/rep0.h>
 
-// クライアント
-nng_socket req_sock;
-nng_req0_open(&req_sock);
-nng_dial(req_sock, "tcp://localhost:5555", nullptr, 0);
-nng_msg* smsg; nng_msg_alloc(&smsg, 0);
-nng_msg_append(smsg, "ping", 4);
-nng_sendmsg(req_sock, smsg, 0);
-nng_msg* reply; nng_recvmsg(req_sock, &reply, 0);
+auto sock = nng::rep::open();
+sock.listen("tcp://*:5556");
+while (true) {
+    auto buf = sock.recv();                         // buffer (RAII)
+    std::string msg(static_cast<const char*>(buf.data()), buf.size());
+    std::string reply = "ACK: " + msg;
+    sock.send(nng::view(reply.data(), reply.size()));
+}
+
+// クライアント (src/nngpp_client.cpp)
+#include <nngpp/nngpp.h>
+#include <nngpp/protocol/req0.h>
+
+auto sock = nng::req::open();
+sock.dial("tcp://localhost:5556");
+sock.send(nng::view(msg.data(), msg.size()));
+auto buf = sock.recv();
+```
+
+### NNG - Python クライアント (pynng)
+
+```python
+# python/nng_client.py
+import pynng
+with pynng.Req0() as sock:
+    sock.dial("tcp://localhost:5556")
+    sock.send(message.encode())
+    reply = sock.recv().decode()
 ```
 
 ## 評価
 
 | 観点 | ZeroMQ | NNG |
-|------|--------|-----|
+| ---- | ------ | --- |
 | C++ API の使いやすさ | ◎ RAII ラッパーが充実 | △ C API のみ（nngpp など別途必要） |
 | エコシステム | ◎ 実績多数・バインディング豊富 | △ 比較的新しい |
 | スレッドモデル | 明示的なコンテキスト管理 | 内部管理（シンプル） |

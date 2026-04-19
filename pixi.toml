@@ -27,6 +27,7 @@ python = ">=3.11,<3.13"  # Python interpreter
 grpcio = ">=1.60.0,<2"  # Python gRPC library
 grpcio-tools = ">=1.60.0,<2"  # Python gRPC tools (protoc)
 pyzmq = ">=26.0.0,<27"  # Python ZeroMQ bindings
+pynng = ">=0.7.2,<1"   # Python NNG bindings
 
 [target.linux-64.dependencies]
 gcc = "==15.1.0"  # GCC compiler
