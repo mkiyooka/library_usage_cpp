@@ -14,7 +14,7 @@ int main() {
 
         while (true) {
             auto buf = sock.recv();
-            std::string msg(static_cast<const char*>(buf.data()), buf.size());
+            std::string msg(static_cast<const char *>(buf.data()), buf.size());
             std::cout << "Received: " << msg << "\n";
 
             if (msg == "exit") {
@@ -28,7 +28,7 @@ int main() {
         }
 
         std::cout << "Server stopped\n";
-    } catch (const nng::exception& e) {
+    } catch (const nng::exception &e) {
         std::cerr << "nng error: " << e.what() << "\n";
         return 1;
     }

@@ -9,7 +9,7 @@
 #include <nng/protocol/reqrep0/rep.h>
 #include <nng/protocol/reqrep0/req.h>
 
-static void check(int rv, const char* op) {
+static void check(int rv, const char *op) {
     if (rv != 0) {
         std::cerr << op << ": " << nng_strerror(rv) << "\n";
         std::exit(1);
@@ -29,14 +29,14 @@ void demo_reqrep() {
 
     // サーバースレッド: 1回応答して終了
     std::thread server([&] {
-        nng_msg* msg = nullptr;
+        nng_msg *msg = nullptr;
         nng_recvmsg(rep_sock, &msg, 0);
-        std::string req(static_cast<char*>(nng_msg_body(msg)), nng_msg_len(msg));
+        std::string req(static_cast<char *>(nng_msg_body(msg)), nng_msg_len(msg));
         std::cout << "  server got: " << req << "\n";
         nng_msg_free(msg);
 
         std::string reply = "pong";
-        nng_msg* rmsg = nullptr;
+        nng_msg *rmsg = nullptr;
         nng_msg_alloc(&rmsg, 0);
         nng_msg_append(rmsg, reply.data(), reply.size());
         nng_sendmsg(rep_sock, rmsg, 0);
@@ -44,14 +44,14 @@ void demo_reqrep() {
 
     // クライアント
     std::string payload = "ping";
-    nng_msg* smsg = nullptr;
+    nng_msg *smsg = nullptr;
     nng_msg_alloc(&smsg, 0);
     nng_msg_append(smsg, payload.data(), payload.size());
     check(nng_sendmsg(req_sock, smsg, 0), "nng_sendmsg");
 
-    nng_msg* rmsg = nullptr;
+    nng_msg *rmsg = nullptr;
     check(nng_recvmsg(req_sock, &rmsg, 0), "nng_recvmsg");
-    std::string reply(static_cast<char*>(nng_msg_body(rmsg)), nng_msg_len(rmsg));
+    std::string reply(static_cast<char *>(nng_msg_body(rmsg)), nng_msg_len(rmsg));
     std::cout << "  client got: " << reply << "\n";
     nng_msg_free(rmsg);
 
@@ -78,7 +78,7 @@ void demo_pubsub() {
     std::thread pub_thread([&] {
         for (int i = 0; i < 3; ++i) {
             std::string msg = "msg-" + std::to_string(i);
-            nng_msg* m = nullptr;
+            nng_msg *m = nullptr;
             nng_msg_alloc(&m, 0);
             nng_msg_append(m, msg.data(), msg.size());
             nng_sendmsg(pub_sock, m, 0);
@@ -89,9 +89,9 @@ void demo_pubsub() {
     pub_thread.join();
     std::this_thread::sleep_for(std::chrono::milliseconds(20));
 
-    nng_msg* m = nullptr;
+    nng_msg *m = nullptr;
     while (nng_recvmsg(sub_sock, &m, NNG_FLAG_NONBLOCK) == 0) {
-        std::string s(static_cast<char*>(nng_msg_body(m)), nng_msg_len(m));
+        std::string s(static_cast<char *>(nng_msg_body(m)), nng_msg_len(m));
         std::cout << "  subscriber got: " << s << "\n";
         nng_msg_free(m);
     }

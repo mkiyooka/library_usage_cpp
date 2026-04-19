@@ -18,7 +18,7 @@ def run():
     socket = context.socket(zmq.REQ)
     socket.connect(server_address)
 
-    print(f"Connected to server")
+    print("Connected to server")
 
     # メッセージ送信
     socket.send_string(message)

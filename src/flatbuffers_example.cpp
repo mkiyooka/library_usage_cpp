@@ -1,7 +1,7 @@
 #include <iostream>
 #include <vector>
 
-#include "person_generated.h"  // flatc が生成
+#include "person_generated.h" // flatc が生成
 
 using namespace fbs;
 
@@ -33,13 +33,12 @@ int main() {
     std::cout << "Serialized size: " << builder.GetSize() << " bytes\n\n";
 
     // --- デシリアライズ（ゼロコピー）---
-    const uint8_t* buf = builder.GetBufferPointer();
-    const PersonList* pl = GetPersonList(buf);
+    const uint8_t *buf = builder.GetBufferPointer();
+    const PersonList *pl = GetPersonList(buf);
 
     std::cout << "Deserialized " << pl->people()->size() << " people:\n";
-    for (const auto* p : *pl->people()) {
-        std::cout << "  [" << p->id() << "] "
-                  << p->name()->str() << " <" << p->email()->str() << ">"
+    for (const auto *p : *pl->people()) {
+        std::cout << "  [" << p->id() << "] " << p->name()->str() << " <" << p->email()->str() << ">"
                   << "  score=" << p->score() << "\n";
     }
 

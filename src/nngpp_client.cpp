@@ -4,7 +4,7 @@
 #include <nngpp/nngpp.h>
 #include <nngpp/protocol/req0.h>
 
-int main(int argc, char* argv[]) {
+int main(int argc, char *argv[]) {
     try {
         auto sock = nng::req::open();
         sock.dial("tcp://localhost:5556");
@@ -17,10 +17,10 @@ int main(int argc, char* argv[]) {
         std::cout << "Sent: " << msg << "\n";
 
         auto buf = sock.recv();
-        std::string reply(static_cast<const char*>(buf.data()), buf.size());
+        std::string reply(static_cast<const char *>(buf.data()), buf.size());
         std::cout << "Received: " << reply << "\n";
 
-    } catch (const nng::exception& e) {
+    } catch (const nng::exception &e) {
         std::cerr << "nng error: " << e.what() << "\n";
         return 1;
     }
