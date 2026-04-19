@@ -282,6 +282,34 @@ add_executable(capnproto_example
 target_include_directories(capnproto_example PRIVATE ${CAPNP_OUT_DIR})
 target_link_libraries(capnproto_example PRIVATE CapnProto::capnp)
 
+# csv-parser example
+add_executable(csv_example csv_example.cpp)
+target_link_libraries(csv_example PRIVATE csv)
+
+# NNG example
+add_executable(nng_example nng_example.cpp)
+target_link_libraries(nng_example PRIVATE nng)
+
+# FlatBuffers example (IDL → C++ ヘッダー生成)
+set(FBS_SCHEMA ${CMAKE_SOURCE_DIR}/proto/person.fbs)
+set(FBS_OUT_DIR ${CMAKE_CURRENT_BINARY_DIR}/fbs_gen)
+file(MAKE_DIRECTORY ${FBS_OUT_DIR})
+add_custom_command(
+    OUTPUT ${FBS_OUT_DIR}/person_generated.h
+    COMMAND $<TARGET_FILE:flatc>
+            --cpp --scoped-enums
+            -o ${FBS_OUT_DIR}
+            ${FBS_SCHEMA}
+    DEPENDS ${FBS_SCHEMA} flatc
+    COMMENT "Generating FlatBuffers C++ from person.fbs"
+)
+add_executable(flatbuffers_example
+    flatbuffers_example.cpp
+    ${FBS_OUT_DIR}/person_generated.h
+)
+target_include_directories(flatbuffers_example PRIVATE ${FBS_OUT_DIR})
+target_link_libraries(flatbuffers_example PRIVATE flatbuffers)
+
 # プリコンパイル済みヘッダーの設定
 if(USE_PCH)
     target_precompile_headers(cmd PRIVATE

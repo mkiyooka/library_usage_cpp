@@ -1,0 +1,14 @@
+namespace fbs;
+
+table Person {
+  id: uint32;
+  name: string;
+  email: string;
+  score: double;
+}
+
+table PersonList {
+  people: [Person];
+}
+
+root_type PersonList;

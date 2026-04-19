@@ -34,6 +34,9 @@ C++ライブラリの使用例を集めたサンプルプロジェクトです�
 - **msgpack-c**: MessagePackシリアライゼーション
 - **Cap'n Proto**: 高速シリアライゼーション・RPC
 - **Apache Arrow**: 列指向メモリフォーマット
+- **csv-parser**: CSV 読み書き
+- **NNG**: nanomsg-next-gen メッセージング
+- **FlatBuffers**: ゼロコピーシリアライゼーション
 
 ### 科学技術計算
 
@@ -147,6 +150,18 @@ cmake --build build -j 8
 # Apache Arrow 列指向データ処理
 ./build/arrow_example
 
+# CSV 読み書き（csv-parser）
+./build/csv_example
+
+# NNG メッセージング（Req/Rep, Pub/Sub）
+./build/nng_example
+
+# FlatBuffers ゼロコピーシリアライゼーション
+./build/flatbuffers_example
+
+# シリアライゼーションベンチマーク（Celero: cereal/msgpack/Cap'n Proto/FlatBuffers）
+./build/benches/bench_serialization
+
 # --- 科学技術計算 ---
 
 # 線形代数（Eigen）
@@ -209,6 +224,8 @@ pixi run fullcheck
 
 - [`docs/libraries-existing.md`](docs/libraries-existing.md): 汎用ユーティリティ・並列・データ処理ライブラリの機能まとめ（推奨/用途も記載）
 - [`docs/libraries-scientific.md`](docs/libraries-scientific.md): 科学技術計算ライブラリの機能まとめ
+- [`docs/comparison-messaging.md`](docs/comparison-messaging.md): ZeroMQ vs NNG 比較（API・パターン・推奨）
+- [`docs/comparison-serialization.md`](docs/comparison-serialization.md): msgpack / Cap'n Proto / FlatBuffers / cereal 比較（ベンチマーク含む）
 
 ## ディレクトリ構成
 

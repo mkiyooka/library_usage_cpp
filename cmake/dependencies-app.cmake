@@ -408,3 +408,48 @@ FetchContent_Declare(Arrow
     DOWNLOAD_EXTRACT_TIMESTAMP ON
 )
 FetchContent_MakeAvailable(Arrow)
+
+# csv-parser - CSV reading/writing (MIT)
+set(CSV_BUILD_TESTS OFF CACHE BOOL "" FORCE)
+FetchContent_Declare(csv-parser
+    URL https://github.com/vincentlaucsb/csv-parser/archive/refs/tags/3.5.0.tar.gz
+    URL_HASH SHA256=4f1cb8e6519e3c863ee3beb56c71a08a1c31bfd80aaec055344df1f9109b4e6d
+    DOWNLOAD_EXTRACT_TIMESTAMP ON
+)
+FetchContent_MakeAvailable(csv-parser)
+
+# NNG - nanomsg next generation (MIT)
+set(NNG_TESTS OFF CACHE BOOL "" FORCE)
+set(NNG_TOOLS OFF CACHE BOOL "" FORCE)
+set(NNG_ENABLE_TLS OFF CACHE BOOL "" FORCE)
+FetchContent_Declare(nng
+    URL https://github.com/nanomsg/nng/archive/refs/tags/v1.11.tar.gz
+    URL_HASH SHA256=12aaff6f8f183ba0fec378af8620c47cf4be6da975d016ec6cdec2fbac0d3534
+    DOWNLOAD_EXTRACT_TIMESTAMP ON
+)
+FetchContent_MakeAvailable(nng)
+
+# FlatBuffers - Serialization (Apache-2.0)
+set(FLATBUFFERS_BUILD_TESTS OFF CACHE BOOL "" FORCE)
+set(FLATBUFFERS_BUILD_FLATC ON CACHE BOOL "" FORCE)
+set(FLATBUFFERS_BUILD_FLATHASH OFF CACHE BOOL "" FORCE)
+set(FLATBUFFERS_BUILD_BENCHMARKS OFF CACHE BOOL "" FORCE)
+set(FLATBUFFERS_BUILD_SHAREDLIB OFF CACHE BOOL "" FORCE)
+FetchContent_Declare(flatbuffers
+    URL https://github.com/google/flatbuffers/archive/refs/tags/v25.12.19.tar.gz
+    URL_HASH SHA256=f81c3162b1046fe8b84b9a0dbdd383e24fdbcf88583b9cb6028f90d04d90696a
+    DOWNLOAD_EXTRACT_TIMESTAMP ON
+)
+FetchContent_MakeAvailable(flatbuffers)
+
+# Celero - Benchmarking framework (Apache-2.0)
+set(CELERO_ENABLE_TESTS OFF CACHE BOOL "" FORCE)
+set(CELERO_ENABLE_EXPERIMENTS OFF CACHE BOOL "" FORCE)
+set(CELERO_COMPILE_DYNAMIC_LIBRARIES OFF CACHE BOOL "" FORCE)
+set(CELERO_ENABLE_WARNINGS_AS_ERRORS OFF CACHE BOOL "" FORCE)
+FetchContent_Declare(celero
+    URL https://github.com/DigitalInBlue/Celero/archive/refs/tags/v2.10.0.tar.gz
+    URL_HASH SHA256=166f73a1f450396238074c7444e3295082bdda875355c62e1863af12a83be8fa
+    DOWNLOAD_EXTRACT_TIMESTAMP ON
+)
+FetchContent_MakeAvailable(celero)
