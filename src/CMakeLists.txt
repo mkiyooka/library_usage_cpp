@@ -229,6 +229,59 @@ target_include_directories(hdf5_example PRIVATE
 add_executable(matplot_example matplot_example.cpp)
 target_link_libraries(matplot_example PRIVATE matplot)
 
+# oneTBB example
+add_executable(onetbb_example onetbb_example.cpp)
+target_link_libraries(onetbb_example PRIVATE TBB::tbb)
+
+# Taskflow example (header-only)
+add_executable(taskflow_example taskflow_example.cpp)
+target_link_libraries(taskflow_example PRIVATE Taskflow)
+
+# Zstandard example
+add_executable(zstd_example zstd_example.cpp)
+target_link_libraries(zstd_example PRIVATE libzstd_static)
+
+# CTRE example (header-only)
+add_executable(ctre_example ctre_example.cpp)
+target_link_libraries(ctre_example PRIVATE ctre)
+
+# RE2 example
+add_executable(re2_example re2_example.cpp)
+target_link_libraries(re2_example PRIVATE re2::re2)
+
+# msgpack-c example (header-only C++ mode)
+add_executable(msgpack_example msgpack_example.cpp)
+target_link_libraries(msgpack_example PRIVATE msgpack-cxx)
+
+# Apache Arrow example
+add_executable(arrow_example arrow_example.cpp)
+target_link_libraries(arrow_example PRIVATE arrow_static)
+target_include_directories(arrow_example PRIVATE
+    ${arrow_SOURCE_DIR}/cpp/src
+    ${arrow_BINARY_DIR}/src
+)
+
+# Cap'n Proto example (IDL → C++ コード生成)
+set(CAPNP_SCHEMA ${CMAKE_SOURCE_DIR}/proto/person.capnp)
+set(CAPNP_OUT_DIR ${CMAKE_CURRENT_BINARY_DIR}/capnp_gen)
+file(MAKE_DIRECTORY ${CAPNP_OUT_DIR})
+add_custom_command(
+    OUTPUT ${CAPNP_OUT_DIR}/person.capnp.h ${CAPNP_OUT_DIR}/person.capnp.c++
+    COMMAND ${CMAKE_COMMAND} -E env "PATH=${CMAKE_BINARY_DIR}:$ENV{PATH}"
+            $<TARGET_FILE:capnp_tool> compile
+            -oc++:${CAPNP_OUT_DIR}
+            --src-prefix=${CMAKE_SOURCE_DIR}/proto
+            ${CAPNP_SCHEMA}
+    DEPENDS ${CAPNP_SCHEMA} capnp_tool capnpc_cpp
+    COMMENT "Generating Cap'n Proto C++ from person.capnp"
+)
+add_executable(capnproto_example
+    capnproto_example.cpp
+    ${CAPNP_OUT_DIR}/person.capnp.c++
+)
+target_include_directories(capnproto_example PRIVATE ${CAPNP_OUT_DIR})
+target_link_libraries(capnproto_example PRIVATE CapnProto::capnp)
+
 # プリコンパイル済みヘッダーの設定
 if(USE_PCH)
     target_precompile_headers(cmd PRIVATE

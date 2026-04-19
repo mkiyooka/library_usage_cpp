@@ -287,3 +287,124 @@ FetchContent_Declare(matplotplusplus
 set(MATPLOTPP_BUILD_EXAMPLES OFF CACHE BOOL "" FORCE)
 set(MATPLOTPP_BUILD_TESTS OFF CACHE BOOL "" FORCE)
 FetchContent_MakeAvailable(matplotplusplus)
+
+# oneTBB - Threading Building Blocks (Apache-2.0)
+set(TBB_TEST OFF CACHE BOOL "" FORCE)
+set(TBB_EXAMPLES OFF CACHE BOOL "" FORCE)
+FetchContent_Declare(TBB
+    URL https://github.com/uxlfoundation/oneTBB/archive/refs/tags/v2022.3.0.tar.gz
+    URL_HASH SHA256=01598a46c1162c27253a0de0236f520fd8ee8166e9ebb84a4243574f88e6e50a
+    DOWNLOAD_EXTRACT_TIMESTAMP ON
+)
+FetchContent_MakeAvailable(TBB)
+
+# Taskflow - Task parallelism (Apache-2.0 WITH LLVM-exception, header-only)
+set(TF_BUILD_TESTS OFF CACHE BOOL "" FORCE)
+set(TF_BUILD_EXAMPLES OFF CACHE BOOL "" FORCE)
+FetchContent_Declare(Taskflow
+    URL https://github.com/taskflow/taskflow/archive/refs/tags/v3.9.0.tar.gz
+    URL_HASH SHA256=d872a19843d12d437eba9b8664835b7537b92fe01fdb33ed92ca052d2483be2d
+    DOWNLOAD_EXTRACT_TIMESTAMP ON
+)
+FetchContent_MakeAvailable(Taskflow)
+
+# Zstandard - Fast lossless compression (BSD OR GPLv2 → BSD選択)
+set(ZSTD_BUILD_PROGRAMS OFF CACHE BOOL "" FORCE)
+set(ZSTD_BUILD_TESTS OFF CACHE BOOL "" FORCE)
+set(ZSTD_BUILD_SHARED OFF CACHE BOOL "" FORCE)
+set(ZSTD_BUILD_STATIC ON CACHE BOOL "" FORCE)
+FetchContent_Declare(zstd
+    URL https://github.com/facebook/zstd/archive/refs/tags/v1.5.7.tar.gz
+    URL_HASH SHA256=37d7284556b20954e56e1ca85b80226768902e2edabd3b649e9e72c0c9012ee3
+    SOURCE_SUBDIR build/cmake
+    DOWNLOAD_EXTRACT_TIMESTAMP ON
+)
+FetchContent_MakeAvailable(zstd)
+
+# CTRE - Compile-Time Regular Expressions (Apache-2.0 WITH LLVM-exception, header-only)
+FetchContent_Declare(ctre
+    URL https://github.com/hanickadot/compile-time-regular-expressions/archive/refs/tags/v3.10.0.tar.gz
+    URL_HASH SHA256=b17e6c9a6cc0cea65132f62a6c699cefed952721063569d6339eb3ca471045e6
+    DOWNLOAD_EXTRACT_TIMESTAMP ON
+)
+FetchContent_MakeAvailable(ctre)
+
+# Abseil - Google C++ common libraries (Apache-2.0); required by RE2
+set(ABSL_PROPAGATE_CXX_STD ON CACHE BOOL "" FORCE)
+set(ABSL_BUILD_TESTING OFF CACHE BOOL "" FORCE)
+FetchContent_Declare(absl
+    URL https://github.com/abseil/abseil-cpp/archive/refs/tags/20260107.1.tar.gz
+    URL_HASH SHA256=4314e2a7cbac89cac25a2f2322870f343d81579756ceff7f431803c2c9090195
+    DOWNLOAD_EXTRACT_TIMESTAMP ON
+)
+FetchContent_MakeAvailable(absl)
+
+# RE2 - Fast regular expressions (BSD-3-Clause)
+set(RE2_BUILD_TESTING OFF CACHE BOOL "" FORCE)
+set(RE2_INSTALL OFF CACHE BOOL "" FORCE)
+FetchContent_Declare(re2
+    URL https://github.com/google/re2/archive/refs/tags/2025-11-05.tar.gz
+    URL_HASH SHA256=87f6029d2f6de8aa023654240a03ada90e876ce9a4676e258dd01ea4c26ffd67
+    DOWNLOAD_EXTRACT_TIMESTAMP ON
+)
+FetchContent_MakeAvailable(re2)
+
+# msgpack-c - MessagePack serialization (BSL-1.0, header-only C++ mode)
+set(MSGPACK_BUILD_TESTS OFF CACHE BOOL "" FORCE)
+set(MSGPACK_BUILD_EXAMPLES OFF CACHE BOOL "" FORCE)
+set(MSGPACK_USE_BOOST OFF CACHE BOOL "" FORCE)
+FetchContent_Declare(msgpack
+    URL https://github.com/msgpack/msgpack-c/archive/refs/tags/cpp-7.0.0.tar.gz
+    URL_HASH SHA256=070881ebea9208cf7e731fd5a46a11404025b2f260ab9527e32dfcb7c689fbfc
+    DOWNLOAD_EXTRACT_TIMESTAMP ON
+)
+FetchContent_MakeAvailable(msgpack)
+
+# Cap'n Proto - Serialization and RPC (MIT)
+# GNU拡張が必要なため CMAKE_CXX_EXTENSIONS を一時的に ON にする
+set(_saved_cxx_ext ${CMAKE_CXX_EXTENSIONS})
+set(CMAKE_CXX_EXTENSIONS ON)
+set(BUILD_TESTING OFF CACHE BOOL "" FORCE)
+set(CAPNP_LITE OFF CACHE BOOL "" FORCE)
+FetchContent_Declare(capnproto
+    URL https://github.com/capnproto/capnproto/archive/refs/tags/v1.1.0.tar.gz
+    URL_HASH SHA256=c0a0d78a07e821f7bae26c7fcac20a9202eb3d639a673b2606b76092a1f35b6b
+    SOURCE_SUBDIR c++
+    DOWNLOAD_EXTRACT_TIMESTAMP ON
+)
+FetchContent_MakeAvailable(capnproto)
+set(CMAKE_CXX_EXTENSIONS ${_saved_cxx_ext})
+
+# Apache Arrow - Columnar memory format and analytics (Apache-2.0)
+set(ARROW_BUILD_SHARED OFF CACHE BOOL "" FORCE)
+set(ARROW_BUILD_STATIC ON CACHE BOOL "" FORCE)
+set(ARROW_BUILD_TESTS OFF CACHE BOOL "" FORCE)
+set(ARROW_BUILD_BENCHMARKS OFF CACHE BOOL "" FORCE)
+set(ARROW_BUILD_EXAMPLES OFF CACHE BOOL "" FORCE)
+set(ARROW_BUILD_INTEGRATION OFF CACHE BOOL "" FORCE)
+set(ARROW_USE_GLOG OFF CACHE BOOL "" FORCE)
+set(ARROW_WITH_BROTLI OFF CACHE BOOL "" FORCE)
+set(ARROW_WITH_BZ2 OFF CACHE BOOL "" FORCE)
+set(ARROW_WITH_LZ4 OFF CACHE BOOL "" FORCE)
+set(ARROW_WITH_SNAPPY OFF CACHE BOOL "" FORCE)
+set(ARROW_WITH_ZLIB OFF CACHE BOOL "" FORCE)
+set(ARROW_WITH_ZSTD OFF CACHE BOOL "" FORCE)
+set(ARROW_FLIGHT OFF CACHE BOOL "" FORCE)
+set(ARROW_PARQUET OFF CACHE BOOL "" FORCE)
+set(ARROW_ORC OFF CACHE BOOL "" FORCE)
+set(ARROW_DATASET OFF CACHE BOOL "" FORCE)
+set(ARROW_JSON OFF CACHE BOOL "" FORCE)
+set(ARROW_FILESYSTEM OFF CACHE BOOL "" FORCE)
+set(ARROW_CSV OFF CACHE BOOL "" FORCE)
+set(ARROW_HDFS OFF CACHE BOOL "" FORCE)
+set(ARROW_COMPUTE OFF CACHE BOOL "" FORCE)
+set(ARROW_IPC ON CACHE BOOL "" FORCE)
+set(ARROW_SIMD_LEVEL "NONE" CACHE STRING "" FORCE)
+set(ARROW_BUILD_UTILITIES OFF CACHE BOOL "" FORCE)
+FetchContent_Declare(Arrow
+    URL https://github.com/apache/arrow/archive/refs/tags/apache-arrow-19.0.1.tar.gz
+    URL_HASH SHA256=4c898504958841cc86b6f8710ecb2919f96b5e10fa8989ac10ac4fca8362d86a
+    SOURCE_SUBDIR cpp
+    DOWNLOAD_EXTRACT_TIMESTAMP ON
+)
+FetchContent_MakeAvailable(Arrow)

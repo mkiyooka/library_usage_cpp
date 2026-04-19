@@ -227,3 +227,209 @@ out << YAML::BeginMap << YAML::Key << "name" << YAML::Value << "test" << YAML::E
 - `TEST_CASE`, `SUBCASE` によるテスト定義
 - `CHECK`, `REQUIRE` などのアサーション
 - コンパイル時間が短く既存コードへの埋め込みが容易
+
+---
+
+## Catch2 — テストフレームワーク
+
+- **バージョン**: 3.8.1
+- **ライセンス**: BSL-1.0
+- **ヘッダーオンリー**: ❌（v3 からコンパイルが必要）
+- **サンプル**: `tests/test_catch2.cpp`
+
+### 主な機能
+
+- `TEST_CASE`, `SECTION` による BDD 風テスト構造
+- `REQUIRE_THAT`, `CHECK_THAT` マッチャー
+- テンプレートテスト (`TEMPLATE_TEST_CASE`)
+- ベンチマーク機能内蔵 (`BENCHMARK`)
+- **推奨**: GoogleTest と機能がほぼ同等だが、外部依存なし・ヘッダー構成がシンプル
+
+---
+
+## GoogleTest — テストフレームワーク
+
+- **バージョン**: 1.16.0
+- **ライセンス**: BSD-3-Clause
+- **ヘッダーオンリー**: ❌
+- **サンプル**: `tests/test_gtest.cpp`
+
+### 主な機能
+
+- `TEST`, `TEST_F` によるテスト・フィクスチャ定義
+- `EXPECT_*`, `ASSERT_*` アサーション群
+- `EXPECT_THAT` + Matcher の組み合わせ
+- パラメータ化テスト (`TEST_P`, `INSTANTIATE_TEST_SUITE_P`)
+- Google Mock 内蔵
+- **推奨**: 業界標準。RapidCheck・ApprovalTests との統合が容易
+
+---
+
+## RapidCheck — プロパティベーステスト
+
+- **バージョン**: HEAD (2024-09)
+- **ライセンス**: BSD-2-Clause
+- **ヘッダーオンリー**: ❌
+- **サンプル**: `tests/test_rapidcheck.cpp`
+
+### 主な機能
+
+- Haskell QuickCheck の C++ 移植
+- 入力値の自動生成・縮小 (shrinking)
+- GoogleTest/Catch2 統合マクロ (`RC_GTEST_PROP`)
+- カスタムジェネレータ (`rc::gen::*`)
+- **推奨**: 境界値・回帰テストを網羅的に行う場合に有効
+
+---
+
+## ApprovalTests — スナップショットテスト
+
+- **バージョン**: 10.13.0
+- **ライセンス**: Apache-2.0
+- **ヘッダーオンリー**: ✅（単一ヘッダー）
+- **サンプル**: `tests/test_approvals.cpp`
+
+### 主な機能
+
+- 出力文字列をファイル（`.approved.txt`）と比較
+- 差分が出たら承認ファイルを更新するだけでテスト更新
+- GoogleTest / Catch2 / doctest 対応
+- 複雑なオブジェクトや大量出力の「ゴールデンファイル」テストに最適
+- **推奨**: 出力形式が安定しているが頻繁に変化するレポート・シリアライズ出力の検証に有効
+
+---
+
+## oneTBB — 並列アルゴリズム
+
+- **バージョン**: 2022.1.0
+- **ライセンス**: Apache-2.0
+- **ヘッダーオンリー**: ❌
+- **サンプル**: `src/onetbb_example.cpp`
+
+### 主な機能
+
+- `tbb::parallel_for`, `tbb::parallel_reduce`, `tbb::parallel_sort`
+- `tbb::concurrent_vector`, `tbb::concurrent_hash_map`
+- `tbb::task_arena` によるスレッド数・優先度制御
+- フロー グラフ (Flow Graph) による DAG 並列化
+- **推奨**: CPU 並列化の標準的な選択肢。Taskflow より低レベル API で細かい制御が可能
+
+---
+
+## Taskflow — タスクグラフ並列化
+
+- **バージョン**: 3.9.0
+- **ライセンス**: MIT
+- **ヘッダーオンリー**: ✅
+- **サンプル**: `src/taskflow_example.cpp`
+
+### 主な機能
+
+- DAG タスクグラフの宣言的な定義 (`taskflow.emplace`)
+- `for_each_index` によるデータ並列ループ
+- 条件付きタスク (condition task) によるループ・分岐
+- 非同期・サブフローのサポート
+- **推奨**: タスク依存関係を明示したい場合に oneTBB より直感的
+
+---
+
+## Zstandard — 高速圧縮
+
+- **バージョン**: 1.5.7
+- **ライセンス**: BSD-3-Clause / GPL-2.0
+- **ヘッダーオンリー**: ❌
+- **サンプル**: `src/zstd_example.cpp`
+
+### 主な機能
+
+- 高速圧縮・展開（LZ4 並みの速度と gzip 並みの圧縮率を両立）
+- 圧縮レベル 1〜22（`ZSTD_maxCLevel()`）
+- ストリーミング API (`ZSTD_CStream`, `ZSTD_DStream`)
+- 辞書圧縮 (Dictionary) で小さいデータでも高圧縮率
+- **推奨**: ファイル・ネットワークデータの圧縮で LZ4 の後継として広く使われる
+
+---
+
+## CTRE — コンパイル時正規表現
+
+- **バージョン**: 3.10.1
+- **ライセンス**: Apache-2.0
+- **ヘッダーオンリー**: ✅
+- **サンプル**: `src/ctre_example.cpp`
+
+### 主な機能
+
+- 正規表現をコンパイル時に検証・最適化
+- `ctre::match`, `ctre::search`, `ctre::search_all`
+- キャプチャグループへの型安全アクセス (`m.get<N>()`)
+- ゼロオーバーヘッドのパターンマッチ（実行時正規表現エンジン不要）
+- **推奨**: パターンが固定の場合に RE2 より高速。`\-` のエスケープなど PCRE と細部が異なる
+
+---
+
+## RE2 — 高速正規表現
+
+- **バージョン**: 2024-11-01
+- **ライセンス**: BSD-3-Clause
+- **ヘッダーオンリー**: ❌
+- **サンプル**: `src/re2_example.cpp`
+
+### 主な機能
+
+- 線形時間保証（壊滅的バックトラックなし）
+- `RE2::FullMatch`, `RE2::PartialMatch`, `RE2::FindAndConsume`
+- 名前付きキャプチャグループ (`(?P<name>...)`)
+- `RE2::GlobalReplace` による文字列置換
+- **推奨**: 動的パターン・ユーザー入力のパターンには CTRE より安全
+
+---
+
+## msgpack-c — MessagePackシリアライゼーション
+
+- **バージョン**: 7.0.0
+- **ライセンス**: BSL-1.0
+- **ヘッダーオンリー**: ✅（C++ モード）
+- **サンプル**: `src/msgpack_example.cpp`
+
+### 主な機能
+
+- `MSGPACK_DEFINE` マクロでカスタム型をシリアライズ
+- `msgpack::pack` / `msgpack::unpack` による pack/unpack
+- バイナリフォーマットで cereal より軽量・高速
+- 言語間互換性が高い（Python/Ruby/Rust などで相互運用可能）
+- **用途**: 軽量な IPC・通信プロトコルとして有効。cereal より通信用途向き
+
+---
+
+## Cap'n Proto — 高速シリアライゼーション・RPC
+
+- **バージョン**: 1.1.0
+- **ライセンス**: MIT
+- **ヘッダーオンリー**: ❌
+- **サンプル**: `src/capnproto_example.cpp`, `proto/person.capnp`
+
+### 主な機能
+
+- IDL (`.capnp`) からの C++ コード自動生成
+- ゼロコピーのメモリ表現（エンコード・デコードなし）
+- Cap'n Proto RPC による非同期 RPC フレームワーク
+- Protocol Buffers よりも高速（パース処理なし）
+- **用途**: Protobuf の代替として。gRPC の代わりに Cap'n Proto RPC で軽量な通信システムを構築可能
+
+---
+
+## Apache Arrow — 列指向データフォーマット
+
+- **バージョン**: 19.0.1
+- **ライセンス**: Apache-2.0
+- **ヘッダーオンリー**: ❌
+- **サンプル**: `src/arrow_example.cpp`
+
+### 主な機能
+
+- 言語間共通の列指向メモリレイアウト (Arrow IPC)
+- `Int32Builder`, `DoubleBuilder`, `StringBuilder` によるバッファ構築
+- `arrow::Table` による複数カラム管理
+- Parquet・Feather などのファイルフォーマット対応
+- Python/R/Java など多言語との相互運用
+- **用途**: DataFrameライクな列指向データ処理・大規模データのプロセス間共有

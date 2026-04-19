@@ -6,7 +6,7 @@ C++ライブラリの使用例を集めたサンプルプロジェクトです�
 
 - **ビルドシステム**: CMake 3.19+ + Ninja
 - **環境管理**: Pixi (クロスプラットフォーム対応)
-- **テストフレームワーク**: doctest
+- **テストフレームワーク**: doctest, Catch2, GoogleTest, RapidCheck, ApprovalTests
 - **C++標準**: C++17
 
 ## 導入ライブラリ
@@ -26,6 +26,14 @@ C++ライブラリの使用例を集めたサンプルプロジェクトです�
 - **doctest**: テストフレームワーク
 - **cppzmq / libzmq**: ZeroMQメッセージング
 - **gRPC / Protobuf**: RPCフレームワーク（オプション）
+- **oneTBB**: Intel Thread Building Blocks（並列アルゴリズム）
+- **Taskflow**: タスクグラフ並列化
+- **Zstandard**: 高速圧縮・展開
+- **CTRE**: コンパイル時正規表現
+- **RE2**: 高速正規表現（Google製）
+- **msgpack-c**: MessagePackシリアライゼーション
+- **Cap'n Proto**: 高速シリアライゼーション・RPC
+- **Apache Arrow**: 列指向メモリフォーマット
 
 ### 科学技術計算
 
@@ -108,6 +116,36 @@ cmake --build build -j 8
 
 # テスト実行
 ./build/tests/test_sub
+./build/tests/test_catch2
+./build/tests/test_gtest
+./build/tests/test_rapidcheck
+./build/tests/test_approvals
+
+# --- 並列・データ処理 ---
+
+# Intel TBB 並列アルゴリズム
+./build/onetbb_example
+
+# タスクグラフ並列化（Taskflow）
+./build/taskflow_example
+
+# 圧縮・展開（Zstandard）
+./build/zstd_example
+
+# コンパイル時正規表現（CTRE）
+./build/ctre_example
+
+# 高速正規表現（RE2）
+./build/re2_example
+
+# MessagePack シリアライゼーション
+./build/msgpack_example
+
+# Cap'n Proto シリアライゼーション・RPC
+./build/capnproto_example
+
+# Apache Arrow 列指向データ処理
+./build/arrow_example
 
 # --- 科学技術計算 ---
 
@@ -169,7 +207,7 @@ pixi run fullcheck
 
 ## ドキュメント
 
-- [`docs/libraries-existing.md`](docs/libraries-existing.md): 汎用ユーティリティライブラリの機能まとめ
+- [`docs/libraries-existing.md`](docs/libraries-existing.md): 汎用ユーティリティ・並列・データ処理ライブラリの機能まとめ（推奨/用途も記載）
 - [`docs/libraries-scientific.md`](docs/libraries-scientific.md): 科学技術計算ライブラリの機能まとめ
 
 ## ディレクトリ構成

@@ -173,33 +173,39 @@ function(setup_quality_targets SOURCE_FILES COMPILABLE_SOURCE_FILES)
                 set(LINT_JOBS 4)
             endif()
 
-            add_custom_target(lint
-                COMMAND ${TOOL_RUNNER} run-clang-tidy
-                    -p ${CMAKE_BINARY_DIR}
-                    -quiet
-                    -j ${LINT_JOBS}
-                    ${COMPILABLE_SOURCE_FILES}
-                WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
-                COMMENT "Running clang-tidy (${LINT_JOBS} parallel jobs)"
-                VERBATIM
-            )
+            if(NOT TARGET lint)
+                add_custom_target(lint
+                    COMMAND ${TOOL_RUNNER} run-clang-tidy
+                        -p ${CMAKE_BINARY_DIR}
+                        -quiet
+                        -j ${LINT_JOBS}
+                        ${COMPILABLE_SOURCE_FILES}
+                    WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
+                    COMMENT "Running clang-tidy (${LINT_JOBS} parallel jobs)"
+                    VERBATIM
+                )
+            endif()
         else()
             # Sequential execution with clang-tidy
-            add_custom_target(lint
-                COMMAND ${TOOL_RUNNER} clang-tidy
-                    -p ${CMAKE_BINARY_DIR}
-                    --quiet
-                    ${COMPILABLE_SOURCE_FILES}
-                WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
-                COMMENT "Running clang-tidy"
-                VERBATIM
-            )
+            if(NOT TARGET lint)
+                add_custom_target(lint
+                    COMMAND ${TOOL_RUNNER} clang-tidy
+                        -p ${CMAKE_BINARY_DIR}
+                        --quiet
+                        ${COMPILABLE_SOURCE_FILES}
+                    WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
+                    COMMENT "Running clang-tidy"
+                    VERBATIM
+                )
+            endif()
         endif()
     else()
-        add_custom_target(lint
-            COMMAND ${CMAKE_COMMAND} -E echo "clang-tidy not available"
-            COMMENT "clang-tidy not found - skipping lint"
-        )
+        if(NOT TARGET lint)
+            add_custom_target(lint
+                COMMAND ${CMAKE_COMMAND} -E echo "clang-tidy not available"
+                COMMENT "clang-tidy not found - skipping lint"
+            )
+        endif()
     endif()
 
 
