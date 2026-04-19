@@ -20,8 +20,7 @@ int main() {
     const size_t bound = ZSTD_compressBound(original.size());
     std::vector<char> compressed(bound);
 
-    const size_t compressed_size =
-        ZSTD_compress(compressed.data(), bound, original.data(), original.size(), 3);
+    const size_t compressed_size = ZSTD_compress(compressed.data(), bound, original.data(), original.size(), 3);
     assert(!ZSTD_isError(compressed_size));
     compressed.resize(compressed_size);
 
@@ -30,12 +29,11 @@ int main() {
     std::cout << "Ratio:            " << (100.0 * compressed_size / original.size()) << "%\n\n";
 
     // --- 解凍 ---
-    const unsigned long long decompressed_bound =
-        ZSTD_getFrameContentSize(compressed.data(), compressed.size());
+    const unsigned long long decompressed_bound = ZSTD_getFrameContentSize(compressed.data(), compressed.size());
     std::vector<char> decompressed(decompressed_bound);
 
-    const size_t decompressed_size = ZSTD_decompress(
-        decompressed.data(), decompressed_bound, compressed.data(), compressed.size());
+    const size_t decompressed_size =
+        ZSTD_decompress(decompressed.data(), decompressed_bound, compressed.data(), compressed.size());
     assert(!ZSTD_isError(decompressed_size));
 
     assert(decompressed_size == original.size());
@@ -47,8 +45,7 @@ int main() {
     for (int level : {1, 3, 9, 19}) {
         std::vector<char> buf(bound);
         size_t sz = ZSTD_compress(buf.data(), bound, original.data(), original.size(), level);
-        std::cout << "  level " << level << ": " << sz << " bytes ("
-                  << (100.0 * sz / original.size()) << "%)\n";
+        std::cout << "  level " << level << ": " << sz << " bytes (" << (100.0 * sz / original.size()) << "%)\n";
     }
 
     return 0;

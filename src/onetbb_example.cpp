@@ -15,7 +15,7 @@ int main() {
     std::vector<double> v(N);
 
     // parallel_for: インデックス範囲を並列に処理
-    tbb::parallel_for(tbb::blocked_range<size_t>(0, N), [&](const tbb::blocked_range<size_t>& r) {
+    tbb::parallel_for(tbb::blocked_range<size_t>(0, N), [&](const tbb::blocked_range<size_t> &r) {
         for (size_t i = r.begin(); i < r.end(); ++i) {
             v[i] = static_cast<double>(i) * 0.000001;
         }
@@ -25,21 +25,24 @@ int main() {
     // parallel_reduce: 並列合計
     double sum = tbb::parallel_reduce(
         tbb::blocked_range<size_t>(0, N), 0.0,
-        [&](const tbb::blocked_range<size_t>& r, double init) {
+        [&](const tbb::blocked_range<size_t> &r, double init) {
             for (size_t i = r.begin(); i < r.end(); ++i) {
                 init += v[i];
             }
             return init;
         },
-        std::plus<double>{});
+        std::plus<double>{}
+    );
     std::cout << "parallel_reduce sum = " << sum << " (expected ~500000)\n";
 
     // parallel_sort
     std::vector<int> nums(20);
-    for (int i = 0; i < 20; ++i) nums[i] = 20 - i;
+    for (int i = 0; i < 20; ++i)
+        nums[i] = 20 - i;
     tbb::parallel_sort(nums.begin(), nums.end());
     std::cout << "parallel_sort: ";
-    for (int x : nums) std::cout << x << " ";
+    for (int x : nums)
+        std::cout << x << " ";
     std::cout << "\n";
 
     // task_arena: スレッド数制限

@@ -45,8 +45,8 @@ int main() {
     auto pl = reader.getRoot<PersonList>();
     std::cout << "Deserialized " << pl.getPeople().size() << " people:\n";
     for (auto p : pl.getPeople()) {
-        std::cout << "  [" << p.getId() << "] " << p.getName().cStr() << " <"
-                  << p.getEmail().cStr() << "> score=" << p.getScore() << "\n";
+        std::cout << "  [" << p.getId() << "] " << p.getName().cStr() << " <" << p.getEmail().cStr()
+                  << "> score=" << p.getScore() << "\n";
     }
 
     return 0;

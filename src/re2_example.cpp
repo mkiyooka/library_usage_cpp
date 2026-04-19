@@ -41,9 +41,8 @@ int main() {
     // --- 名前付きキャプチャグループ ---
     std::cout << "\n-- Named capture groups --\n";
     RE2 log_re(R"((?P<level>\w+)\s+(?P<msg>.+))");
-    std::vector<std::string> lines = {"ERROR connection refused", "INFO server started",
-                                      "WARN low memory"};
-    for (const auto& line : lines) {
+    std::vector<std::string> lines = {"ERROR connection refused", "INFO server started", "WARN low memory"};
+    for (const auto &line : lines) {
         std::string level, msg;
         if (RE2::FullMatch(line, log_re, &level, &msg)) {
             std::cout << "  [" << level << "] " << msg << "\n";

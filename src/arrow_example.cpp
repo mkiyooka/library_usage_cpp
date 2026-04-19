@@ -29,9 +29,10 @@ int main() {
     (void)str_builder.Finish(&str_array);
 
     // スキーマ定義
-    auto schema = arrow::schema({arrow::field("id", arrow::int32()),
-                                 arrow::field("score", arrow::float64()),
-                                 arrow::field("name", arrow::utf8())});
+    auto schema = arrow::schema(
+        {arrow::field("id", arrow::int32()), arrow::field("score", arrow::float64()),
+         arrow::field("name", arrow::utf8())}
+    );
 
     // テーブル作成
     auto table = arrow::Table::Make(schema, {int_array, dbl_array, str_array});
@@ -46,8 +47,7 @@ int main() {
     std::cout << "id  score  name\n";
     std::cout << "--- ------ -----\n";
     for (int64_t i = 0; i < table->num_rows(); ++i) {
-        std::cout << id_col->Value(i) << "   " << score_col->Value(i) << "  "
-                  << name_col->GetString(i) << "\n";
+        std::cout << id_col->Value(i) << "   " << score_col->Value(i) << "  " << name_col->GetString(i) << "\n";
     }
 
     // ChunkedArray スライス
